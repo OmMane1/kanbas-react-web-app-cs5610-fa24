@@ -6,7 +6,7 @@ export default function Dashboard() {
       <h2 id="wd-dashboard-published">Published Courses (12)</h2> <hr />
       <div id="wd-dashboard-courses">
         <div className="wd-dashboard-course">
-          <img src="images\reactjs.webp" width={200} />
+          <img src="images\reactjs.webp" alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/1234/Home">
@@ -19,7 +19,7 @@ export default function Dashboard() {
             <Link to="/Kanbas/Courses/1234/Home"> Go </Link>
           </div>
         </div>
-        <div className="wd-dashboard-course"><img src="images\Python-logo-notext.svg.png" width={200} />
+        <div className="wd-dashboard-course"><img src="images\Python-logo-notext.svg.png" alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/2345/Home">
@@ -31,7 +31,7 @@ export default function Dashboard() {
             </p>
             <Link to="/Kanbas/Courses/2345/Home"> Go </Link>
           </div> </div>
-        <div className="wd-dashboard-course"> <img src="images/Software Engineering.webp" width={200} />
+        <div className="wd-dashboard-course"> <img src="images/Software Engineering.webp"alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/1356/Home">
@@ -43,7 +43,7 @@ export default function Dashboard() {
             </p>
             <Link to="/Kanbas/Courses/1356/Home"> Go </Link>
           </div> </div>
-          <div className="wd-dashboard-course"> <img src="images\DSA.png" width={200} />
+          <div className="wd-dashboard-course"> <img src="images\DSA.png"alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/1400/Home">
@@ -55,7 +55,7 @@ export default function Dashboard() {
             </p>
             <Link to="/Kanbas/Courses/1400/Home"> Go </Link>
           </div> </div>
-          <div className="wd-dashboard-course"> <img src="images\nlp.png" width={200} />
+          <div className="wd-dashboard-course"> <img src="images\nlp.png" alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/1792/Home">
@@ -67,7 +67,7 @@ export default function Dashboard() {
             </p>
             <Link to="/Kanbas/Courses/1792/Home"> Go </Link>
           </div> </div>
-          <div className="wd-dashboard-course"> <img src="images\toc.png" width={200} />
+          <div className="wd-dashboard-course"> <img src="images\toc.png"alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/1060/Home">
@@ -79,7 +79,7 @@ export default function Dashboard() {
             </p>
             <Link to="/Kanbas/Courses/1060/Home"> Go </Link>
           </div> </div>
-          <div className="wd-dashboard-course"> <img src="images\discrete-math.webp" width={200} />
+          <div className="wd-dashboard-course"> <img src="images\discrete-math.webp"alt="description of image" width={200} />
           <div>
             <Link className="wd-dashboard-course-link"
               to="/Kanbas/Courses/2820/Home">
