@@ -9,12 +9,9 @@ export default function Courses() {
     <div id="wd-courses">
       <h2>Course 1234</h2>
       <hr />
-      <table>
-        <tr>
-          <td valign="top">
+      
             <CoursesNavigation />
-          </td>
-          <td valign="top">
+        
             <Routes>
               <Route path="/" element={<Navigate to="Home" />} />
               <Route path="Home" element={<Home />} />
@@ -23,10 +20,7 @@ export default function Courses() {
               <Route path="People" element={<h2>People</h2>} />
               <Route path="Assignments" element={<Assignments />} />
             </Routes>
-          </td>
-        </tr>
-      </table>
-      
+          
     </div>
 );}
 

@@ -9,7 +9,8 @@ export default function App() {
      <Route path="/" element={<Navigate to="Labs"/>}/>
      <Route path="/Labs/*" element={<Labs />} />
      <Route path="/Kanbas/*" element={<Kanbas />} />
-    </Routes>
+     <Route path="/Kanbas" element={<Navigate to="/Kanbas/Dashboard" />} />    
+     </Routes>
    </div>
   </HashRouter>
 );}
