@@ -7,3 +7,97 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
   }
 }
 
+.list-group.wd > .list-group-item {
+  color: red; 
+  background-color: white; 
+  padding: 5px;
+}
+
+.list-group.wd > .list-group-item.active {
+  color: black;
+  background-color: white;
+  border-left: 3px solid black !important;
+
+}
+
+.list-group.wd > .list-group-item:hover {
+  text-decoration: underline; 
+}
+
+
+.btn-secondary {
+  --bs-btn-color: #000 !important;
+  --bs-btn-bg: #c7cdd1 !important;
+  --bs-btn-border-color: #c7cdd1 !important;
+  --bs-btn-hover-color: #fff !important;
+}
+.bg-secondary {
+  --bs-secondary-rgb: 199, 205, 209;
+}
+.list-group-item {
+  --bs-list-group-border-color: gray;
+}
+.wd-lesson {
+  border-left: 3px solid green !important;
+}
+/* src/Kanbas/Courses/Assignments/AssignmentsScreen.css */
+
+.assignments-container {
+  padding: 16px;
+  background-color: #f5f5f5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 8px;
+}
+
+.button {
+  background-color: #007bff; /* Example button color */
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+
+
+.assignment-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #ccc;
+}
+
+.border-left {
+  width: 5px;
+  height: 100%;
+  background-color: green; /* Green border */
+  margin-right: 8px;
+}
+
+.assignment-details {
+  flex: 1;
+}
+
+.assignment-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.assignment-subtext {
+  font-size: 14px;
+  color: #666;
+}

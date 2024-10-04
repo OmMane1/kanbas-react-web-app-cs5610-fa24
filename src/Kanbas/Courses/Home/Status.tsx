@@ -1,34 +1,38 @@
+import { MdDoNotDisturbAlt } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
+import { BiImport } from "react-icons/bi";
+import { LiaFileImportSolid } from "react-icons/lia";
+{/* Find more icons */}
 export default function CourseStatus() {
-    return (
-      <div id="wd-course-status">
-        <h2>Course Status</h2>
-        <table>
-  <tbody>
-    <tr>
-      <td>
-        <button>Unpublish</button>
-      </td>
-      <td>
-        <button>Publish</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<table>
-  <tbody>
-      <td>
-        <tr><button>Import Existing Content</button></tr>
-        <tr> <button>Import from Commons</button></tr>
-        <tr> <button>View Home Page</button></tr>
-        <tr> <button>Choose Course Stream</button></tr>
-        <tr> <button>New Announcements</button></tr>
-        <tr> <button>New Analytics</button></tr>
-        <tr> <button>View Course Notifications</button></tr>
-        </td>
-    
-  </tbody>
-</table>
-      </div>
-  );}
-  
+  return (
+    <div id="wd-course-status" style={{ width: "300px" }}>
+      <h2>Course Status</h2>
+      <div className="d-flex">
+        <div className="w-50 pe-1">
+          <button className="btn btn-lg btn-secondary w-100 text-nowrap ">
+            <MdDoNotDisturbAlt className="me-2 fs-5" /> Unpublish </button>
+        </div>
+        <div className="w-50">
+          <button className="btn btn-lg btn-success w-100">
+            <FaCheckCircle className="me-2 fs-5" /> Publish </button>
+        </div>
+      </div><br />
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <BiImport className="me-2 fs-5" /> Import Existing Content </button>
+      <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <LiaFileImportSolid className="me-2 fs-5" /> Import from Commons </button>
+        <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <LiaFileImportSolid className="me-2 fs-5" /> View Home Page </button>
+        <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <LiaFileImportSolid className="me-2 fs-5" /> Choose Course Stream </button>
+        <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <LiaFileImportSolid className="me-2 fs-5" /> New Announcements </button>
+        <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <LiaFileImportSolid className="me-2 fs-5" /> New Analytics </button>
+        <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
+        <LiaFileImportSolid className="me-2 fs-5" /> View Course Notifications </button>
+
+
+    </div>
+);}
   
