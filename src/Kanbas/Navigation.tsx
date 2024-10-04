@@ -30,14 +30,15 @@ export default function KanbasNavigation() {
         id="wd-neu-link"
         target="_blank"
         href="https://www.northeastern.edu/"
-        className="list-group-item bg-black border-0 text-center d-flex justify-content-center">
+        className="list-group-item bg-black border-0 text-center d-flex justify-content-center"
+        rel="noreferrer">
         <img src="/images/neulogo.png" width="75px" alt="NEU Logo" />
       </a>
-      <Link to="/Kanbas/Account" id="wd-account-link"className={getLinkClass("/Kanbas/Account")}>
+      <Link to="/Kanbas/Account" id="wd-account-link" className={getLinkClass("/Kanbas/Account")} target="_blank" rel="noreferrer">
         <FaRegCircleUser className={getIconClass("/Kanbas/Account")} />
         Account
       </Link>
-      <Link to="/Kanbas/Dashboard" id="wd-dashboard-link"className={getLinkClass("/Kanbas/Dashboard")}>
+      <Link to="/Kanbas/Dashboard" id="wd-dashboard-link" className={getLinkClass("/Kanbas/Dashboard")} target="_blank" rel="noreferrer">
         <AiOutlineDashboard className={getIconClass("/Kanbas/Dashboard")} />
         Dashboard
       </Link>
