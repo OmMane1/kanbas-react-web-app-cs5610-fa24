@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Remove this line if Link is not used
 import { useLocation } from "react-router";
 
   export default function TOC() {
@@ -6,39 +6,33 @@ import { useLocation } from "react-router";
     return (
       <ul className="nav nav-pills">
         <li className="nav-item">
-          <a id="wd-a" href="#/Labs" className="nav-link">
-            Labs
-          </a>
+          <Link to="#/Labs" className="nav-link">Labs</Link>
         </li>
         <li className="nav-item">
-          <a id="wd-a1" href="#/Labs/Lab1"
-            className={`nav-link ${pathname.includes("Lab1") ? "active" : ""}`}>
+          <Link to="#/Labs/Lab1" className={`nav-link ${pathname.includes("Lab1") ? "active" : ""}`}>
             Lab 1
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a id="wd-a2" href="#/Labs/Lab2"
-            className={`nav-link ${pathname.includes("Lab2") ? "active" : ""}`}>
+          <Link to="#/Labs/Lab2" className={`nav-link ${pathname.includes("Lab2") ? "active" : ""}`}>
             Lab 2
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a id="wd-a3" href="#/Labs/Lab3"
-            className={`nav-link ${pathname.includes("Lab3") ? "active" : ""}`}>
+          <Link to="#/Labs/Lab3" className={`nav-link ${pathname.includes("Lab3") ? "active" : ""}`}>
             Lab 3
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a id="wd-k" href="#/Kanbas" className="nav-link">
+          <Link to="#/Kanbas" className="nav-link">
             Kanbas
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a id="wd-k" href="https://github.com/OmMane1/kanbas-react-web-app-cs5610-fa24" className="nav-link">
+          <Link to="https://github.com/OmMane1/kanbas-react-web-app-cs5610-fa24" className="nav-link">
             My GitHub
-          </a>
+          </Link>
         </li>
       </ul>
     );
   }
-  

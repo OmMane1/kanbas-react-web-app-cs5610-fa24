@@ -10,7 +10,7 @@ export default function Dashboard() {
           <div className="card rounded-3 overflow-hidden">
             <Link className="wd-dashboard-course-link text-decoration-none text-dark"
                   to="/Kanbas/Courses/1234/Home">
-              <img src="/images/reactjs.webp" width="100%" height={160}/>
+              <img src="/images/reactjs.webp" width="100%" height={160} alt="React JS Course"/>
               <div className="card-body">
                 <h5 className="wd-dashboard-course-title card-title">
                    CS1234 React JS
@@ -27,7 +27,7 @@ export default function Dashboard() {
           <div className="card rounded-3 overflow-hidden">
             <Link className="wd-dashboard-course-link text-decoration-none text-dark"
                   to="/Kanbas/Courses/2345/Home">
-              <img src="/images/Python-logo-notext.svg.png" width="100%" height={160}/>
+              <img src="/images/Python-logo-notext.svg.png" width="100%" height={160} alt="Introduction to Python Course"/>
               <div className="card-body">
                 <h5 className="wd-dashboard-course-title card-title">
                    CS2345 Introduction to Python
@@ -44,7 +44,7 @@ export default function Dashboard() {
           <div className="card rounded-3 overflow-hidden">
             <Link className="wd-dashboard-course-link text-decoration-none text-dark"
                   to="/Kanbas/Courses/1356/Home"> 
-          <img src="images/Software Engineering.webp"alt="CS1356 Software Engineering"width="100%" height={160} />
+          <img src="images/Software Engineering.webp" alt="CS1356 Software Engineering" width="100%" height={160} />
           <div className="card-body">
                 <h5 className="wd-dashboard-course-title card-title">
               CS1356 Software Engineering </h5>
@@ -61,7 +61,7 @@ export default function Dashboard() {
           <div className="card rounded-3 overflow-hidden">
             <Link className="wd-dashboard-course-link text-decoration-none text-dark"
                   to="/Kanbas/Courses/1400/Home">
-                  <img src="images\DSA.png"alt="CS1400 Data Structure and Algorithms" width="100%" height={160} />           
+                  <img src="images\DSA.png" alt="CS1400 Data Structure and Algorithms" width="100%" height={160} />           
                      <div className="card-body">
                 <h5 className="wd-dashboard-course-title card-title">
                     CS1400 Data Structure and Algorithms
@@ -99,7 +99,7 @@ export default function Dashboard() {
     <div className="card rounded-3 overflow-hidden">
       <Link className="wd-dashboard-course-link text-decoration-none text-dark"
             to="/Kanbas/Courses/1060/Home">
-            <img src="images\toc.png"alt="CS1060 Theory of Computation" width="100%" height={160} />
+            <img src="images\toc.png" alt="CS1060 Theory of Computation" width="100%" height={160} />
             <div className="card-body">
 
             <h5 className="wd-dashboard-course-title card-title">
@@ -118,7 +118,7 @@ export default function Dashboard() {
     <div className="card rounded-3 overflow-hidden">
       <Link className="wd-dashboard-course-link text-decoration-none text-dark"
             to="/Kanbas/Courses/2820/Home">
-            <img src="images\discrete-math.webp"alt=" CS2820 Discrete Mathematics" width="100%" height={160} />
+            <img src="images\discrete-math.webp" alt="CS2820 Discrete Mathematics" width="100%" height={160} />
             <div className="card-body">
 
             <h5 className="wd-dashboard-course-title card-title">

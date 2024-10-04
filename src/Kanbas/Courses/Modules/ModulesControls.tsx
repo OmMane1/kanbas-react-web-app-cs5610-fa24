@@ -1,37 +1,43 @@
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
+
 export default function ModulesControls() {
   return (
     <div id="wd-modules-controls" className="text-nowrap">
-        
       <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
         <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-        Module</button>
+        Module
+      </button>
       <div className="dropdown d-inline me-1 float-end">
         <button id="wd-publish-all-btn" className="btn btn-lg btn-secondary dropdown-toggle"
           type="button" data-bs-toggle="dropdown">
           <GreenCheckmark />
-          Publish All</button>
+          Publish All
+        </button>
         <ul className="dropdown-menu">
           <li>
-            <a id="wd-publish-all-modules-and-items-btn" className="dropdown-item" href="#">
+            <button id="wd-publish-all-modules-and-items-btn" className="dropdown-item" onClick={() => {/* Add your logic here */}}>
               <GreenCheckmark />
-              Publish all modules and items</a>
+              Publish all modules and items
+            </button>
           </li>
           <li>
-            <a id="wd-publish-modules-only-button" className="dropdown-item" href="#">
+            <button id="wd-publish-modules-only-button" className="dropdown-item" onClick={() => {/* Add your logic here */}}>
               <GreenCheckmark />
-              Publish modules only</a>
+              Publish modules only
+            </button>
           </li>
           <li>
-            <a id="wd-publish-all-modules-and-items-btn" className="dropdown-item" href="#">
+            <button id="wd-unpublish-all-modules-btn" className="dropdown-item" onClick={() => {/* Add your logic here */}}>
               <GreenCheckmark />
-              Unpublish all modules</a>
+              Unpublish all modules
+            </button>
           </li>
           <li>
-            <a id="wd-publish-modules-only-button" className="dropdown-item" href="#">
+            <button id="wd-unpublish-modules-only-button" className="dropdown-item" onClick={() => {/* Add your logic here */}}>
               <GreenCheckmark />
-              Unpublish modules only</a>
+              Unpublish modules only
+            </button>
           </li>
         </ul>
       </div>
@@ -49,4 +55,5 @@ export default function ModulesControls() {
         Collapse All
       </button>
     </div>
-);}
+  );
+}

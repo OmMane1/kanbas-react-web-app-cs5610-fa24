@@ -2,7 +2,7 @@ import React from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FiPlus } from 'react-icons/fi'; 
 import './Assignments.css'; 
-import { FaSearch, FaPlus, FaCheckCircle, FaEllipsisV } from "react-icons/fa"; // Importing icons
+import {FaCheckCircle, FaEllipsisV } from "react-icons/fa"; // Importing icons
 
 interface Assignment {
     id: string;
