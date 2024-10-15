@@ -13,7 +13,6 @@ export default function KanbasNavigation() {
         >
             <a
                 id="wd-neu-link"
-                target="_blank"
                 href="https://www.northeastern.edu/"
                 className="list-group-item bg-black border-0 text-center"
             >
