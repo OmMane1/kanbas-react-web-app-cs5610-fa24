@@ -1,4 +1,5 @@
 import { FaPlus } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 import GreenCheckmark from "./GreenCheckmark";
 export default function ModulesControls() {
   return (
@@ -12,26 +13,42 @@ export default function ModulesControls() {
           <GreenCheckmark />
           Publish All</button>
         <ul className="dropdown-menu">
-          <li>
-            <a id="wd-publish-all-modules-and-items-btn" className="dropdown-item" href="#">
-              <GreenCheckmark />
-              Publish all modules and items</a>
-          </li>
-          <li>
-            <a id="wd-publish-modules-only-button" className="dropdown-item" href="#">
-              <GreenCheckmark />
-              Publish modules only</a>
-          </li>
-          <li>
-            <a id="wd-unpublish-modules-only-button" className="dropdown-item" href="#">
-              <GreenCheckmark />
-              Unpublish modules only</a>
-          </li>
-          <li>
-            <a id="wd-unpublish-all-modules-only-button" className="dropdown-item" href="#">
-              <GreenCheckmark />
-              Unpublish all modules</a>
-          </li>
+        <li>
+    <Link 
+        id="wd-publish-all-modules-and-items-btn" 
+        className="dropdown-item" 
+        to="/publish-all" 
+    >
+        <GreenCheckmark />
+        Publish all modules and items
+    </Link>
+</li>
+<li>
+    <Link 
+        id="wd-publish-modules-only-button" 
+        className="dropdown-item" 
+        to="/publish-modules-only" >
+        <GreenCheckmark />
+        Publish modules only    </Link>
+</li>
+        
+<li>
+    <Link 
+        id="wd-unpublish-modules-only-button" 
+        className="dropdown-item" 
+        to="/unpublish-modules-only" >
+        <GreenCheckmark />
+        Unpublish modules only    </Link>
+</li>
+<li>
+    <Link 
+        id="wd-unpublish-all-modules-button" 
+        className="dropdown-item" 
+        to="/unpublish-all-modules" >
+        <GreenCheckmark />
+        Unpublish all modules     </Link>
+</li>
+         
         </ul>
       </div>
       <button
