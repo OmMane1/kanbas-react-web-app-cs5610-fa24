@@ -159,4 +159,25 @@
     color: #888;
     cursor: pointer;
   }
+  .red-text {
+    color: red;
+  }
+  .small-font {
+    font-size: 0.95rem; 
+  }
+  .wd-assignment-list-group {
+    border-left: 5px solid green; /* Add green border on the left */
+  }
+  .wd-assignment-details-content {
+    margin-top: 5px; /* Adjust margin as needed */
+  }
+  .icon-spacing {
+    margin-right: 30px; /* Adjust the margin value as needed */
+  }
+  .wd-assignment-icon {
+    display: flex; /* Use flexbox for vertical alignment */
+    align-items: center;
+    justify-content: center;
+    height: 500%; /* Match the height of the assignment list item */
+  }
   

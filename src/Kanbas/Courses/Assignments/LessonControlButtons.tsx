@@ -3,7 +3,8 @@ import GreenCheckmark from "./GreenCheckmark";
 export default function LessonControlButtons() {
   return (
     <div className="float-end">
-      <GreenCheckmark />
+        <GreenCheckmark />
+        <span className="icon-spacing"></span>
       <IoEllipsisVertical className="fs-4" />
     </div>
 );}

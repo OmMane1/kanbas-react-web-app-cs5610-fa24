@@ -1,80 +1,128 @@
+import LessonControlButtons from "./LessonControlButtons";
+import ModuleControlButtons from "./ModuleControlButtons";
+import { BsGripVertical } from "react-icons/bs";
 import React from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FiPlus } from 'react-icons/fi'; 
 import './Assignments.css'; 
-import {FaCheckCircle, FaEllipsisV } from "react-icons/fa"; // Importing icons
-
-interface Assignment {
-    id: string;
-    title: string;
-    module: string;
-    availability: string;
-    dueDate: string;
-    points: number;
-}
-
-const assignmentsData: Assignment[] = [
-    { id: "A1", title: "A1", module: "Multiple Modules", availability: "Not available until May 6 at 12:00am", dueDate: "May 13 at 11:59pm", points: 100 },
-    { id: "A2", title: "A2", module: "Multiple Modules", availability: "Not available until May 13 at 12:00am", dueDate: "May 20 at 11:59pm", points: 100 },
-    { id: "A3", title: "A3", module: "Multiple Modules", availability: "Not available until May 20 at 12:00am", dueDate: "May 27 at 11:59pm", points: 100 }
-];
-
+import { PiNotePencilLight } from "react-icons/pi";
 export default function Assignments() {
-    return (
+  return (
         <div id="wd-assignments" className="p-3">
-            <div className="input-group mb-3">
-                <span className="input-group-text">
-                    <CiSearch />
-                </span>
-                <input 
-                    id="wd-search-assignment" 
-                    placeholder="Search for Assignments" 
-                    className="form-control search-input" 
+    <div className="d-flex align-items-center mb-3">
+        <div className="flex-grow-1 me-3">
+            <div className="input-group">
+            <span className="input-group-text">
+        <CiSearch className="text-muted" />
+      </span>                
+      <input
+                    id="wd-search-assignment"
+                    placeholder="Search..."
+                    className="form-control search-input"
+                    style={{
+                        border: "1px solid #ccc", 
+                        boxShadow: "none",  
+                        outline: "none", 
+                    }}
                 />
             </div>
-
-            <div className="d-flex justify-content-end mb-3">
-                <button id="wd-add-assignment-group-btn" className="btn btn-secondary">
-                    <FiPlus className="me-1" /> Group
-                </button>
-                <button id="wd-add-assignment-btn" className="btn btn-danger me-2">
-                    <FiPlus className="me-1" /> Assignment
-                </button>
-            </div>
-
-            <h3 id="wd-assignments-title" className="mb-3">
-                ASSIGNMENTS 40% of Total <button className="btn btn-link">+</button>
-            </h3>
-
-            <select className="form-select mb-3">
-                <option>Edit</option>
-                <option>Speed Grader</option>
-                <option>Duplicate</option>
-                <option>Delete</option>
-                <option>Move To...</option>
-                <option>Send To...</option>
-                <option>Copy To...</option>
-                <option>Share to Commons</option>
-            </select>
-
-            <div className="assignments-container">
-                {/* Assignments list */}
-                <div className="assignments-list">
-                    {assignmentsData.map((assignment) => (
-                        <div key={assignment.id} className="assignment-item">
-                            <div className="assignment-left-border"></div>
-                            <div className="assignment-details">
-                                <div className="assignment-title">{assignment.title}</div>
-                                <div className="assignment-info">
-                                    {assignment.module} | {assignment.availability} | Due {assignment.dueDate} | {assignment.points} pts
-                                </div>
-                            </div>
-                            <FaCheckCircle className="check-icon" />
-                            <FaEllipsisV className="ellipsis-icon" />
-                        </div>
-                    ))}
-                </div>
-            </div>
         </div>
-    );
-}
+
+
+        <div className="d-flex">
+            <button id="wd-add-assignment-group-btn" className="btn btn-secondary me-2">
+                <FiPlus className="me-1" /> Group
+            </button>
+            <button id="wd-add-assignment-btn" className="btn btn-danger">
+                <FiPlus className="me-1" /> Assignment
+            </button>
+        </div>
+    </div>
+
+
+
+    <ul className="wd-assignments-list-group rounded-0">
+  <li className="wd-assignment list-group-item p-0 mb-4 fs-5 border border-secondary">
+    <div className="wd-title p-3 ps-2 bg-secondary d-flex justify-content-between align-items-center">
+      <div className="d-flex align-items-center">
+        <BsGripVertical className="me-2 fs-3" />
+        ASSIGNMENTS
+      </div>
+      <div className="d-flex align-items-center">
+        <div className="ms-2 bg-secondary text-black border border-dark rounded p-2">
+          40% of Total
+        </div>
+        <ModuleControlButtons />
+      </div>
+    </div>
+
+        <ul className="wd-assignment-list-group rounded-0">
+  <li className="wd-assignment-list-item p-3 ps-1 d-flex">
+      <BsGripVertical className="me-2 fs-3" />
+      <PiNotePencilLight className="me-2 fs-3" />
+
+    <div className="wd-assignment-details flex-grow-1">
+      <a
+        className="wd-assignment-link"
+        href="#/Kanbas/Courses/1234/Assignments/123"
+        style={{ color: 'black', textDecoration: 'none' }}>
+        A1
+      </a>      
+      <LessonControlButtons />
+        <p className="small-font">
+          <span style={{ color: 'red' }}>Multiple Modules</span>
+          | <b>Not Available until</b> May 6 at 12:00 AM |
+          <p className="small-font">
+            <b>Due</b> May 13 at 11:59 PM | 100pts
+          </p>
+        </p>
+    </div>
+  </li>
+  <hr></hr>
+  <li className="wd-assignment-list-item p-3 ps-1 d-flex">
+    <div className="wd-assignment-icon me-1">
+      <BsGripVertical className="me-2 fs-3" />
+      <PiNotePencilLight className="me-2 fs-3" />
+    </div>
+    <div className="wd-assignment-details flex-grow-1">
+      <a
+        className="wd-assignment-link"
+        href="#/Kanbas/Courses/1234/Assignments/123"
+        style={{ color: 'black', textDecoration: 'none' }}>
+        A2
+      </a>      
+      <LessonControlButtons />
+        <p className="small-font"> <span style={{ color: 'red' }}>Multiple Modules</span>| <b>Not Available until</b> May 13 at 12:00am |
+            <p className="small-font"><b>Due</b> May 20 at 11:59pm | 100pts</p>
+            </p>
+    </div>
+  </li>
+  <hr></hr>
+  <li className="wd-assignment-list-item p-3 ps-1 d-flex">
+    <div className="wd-assignment-icon me-1">
+      <BsGripVertical className="me-2 fs-3" />
+      <PiNotePencilLight className="me-2 fs-3" />
+    </div>
+    <div className="wd-assignment-details flex-grow-1">
+      <a
+        className="wd-assignment-link"
+        href="#/Kanbas/Courses/1234/Assignments/123"
+        style={{ color: 'black', textDecoration: 'none' }}>
+        A3
+      </a>      
+      <LessonControlButtons />
+
+      <p className="small-font"><span style={{ color: 'red' }}>Multiple Modules</span>
+ | <b>Not Available until</b> May 20 at 12:00am |
+            <p className="small-font"><b>Due</b> May 27 at 11:59pm | 100pts</p>
+            </p>
+    </div>
+  </li>
+        </ul>
+        </li>
+        </ul>
+      </div>
+    
+  );}
+  
+  

@@ -8,9 +8,10 @@ import Navigation from "./Navigation";
 
 export default function Account() {
   return (
-    <div id="wd-account-screen">
+    <div className="d-flex">
              
             <Navigation />
+            <div className="wd-content p-3">
       <Routes>
         <Route path="/" element={<Navigate to="/Kanbas/Account/Signin" />} />
         <Route path="/Signin"  element={<Signin />} />
@@ -18,7 +19,7 @@ export default function Account() {
         <Route path="/Signup" element={<Signup />} />
       </Routes>
       
-
+      </div>
     </div>
   );
 }

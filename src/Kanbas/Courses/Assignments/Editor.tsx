@@ -1,4 +1,3 @@
-// src/Kanbas/Courses/Assignments/EditAssignment.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Updated import
 import './Assignments.css'; // Import your CSS file

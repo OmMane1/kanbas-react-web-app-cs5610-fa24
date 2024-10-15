@@ -2,6 +2,12 @@ import { MdDoNotDisturbAlt } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { BiImport } from "react-icons/bi";
 import { LiaFileImportSolid } from "react-icons/lia";
+import { IoMdHome ,  IoMdNotifications } from "react-icons/io";
+import { BsBarChartLineFill } from "react-icons/bs";
+import { TfiAnnouncement } from "react-icons/tfi";
+import { IoAnalytics } from "react-icons/io5";
+
+
 export default function CourseStatus() {
   return (
     <div id="wd-course-status" style={{ width: "300px" }}>
@@ -21,17 +27,14 @@ export default function CourseStatus() {
       <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
         <LiaFileImportSolid className="me-2 fs-5" /> Import from Commons </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <LiaFileImportSolid className="me-2 fs-5" /> View Home Page </button>
+        <IoMdHome className="me-2 fs-5" /> View Home Page </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <LiaFileImportSolid className="me-2 fs-5" /> Choose Course Stream </button>
+        <BsBarChartLineFill className="me-2 fs-5" /> Choose Course Stream </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <LiaFileImportSolid className="me-2 fs-5" /> New Announcements </button>
+        <TfiAnnouncement className="me-2 fs-5" /> New Announcements </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <LiaFileImportSolid className="me-2 fs-5" /> New Analytics </button>
+        <IoAnalytics className="me-2 fs-5" /> New Analytics </button>
         <button className="btn btn-lg btn-secondary w-100 mt-1 text-start">
-        <LiaFileImportSolid className="me-2 fs-5" /> View Course Notifications </button>
-
-
+        <IoMdNotifications className="me-2 fs-5" /> View Course Notifications </button>
     </div>
 );}
-  
