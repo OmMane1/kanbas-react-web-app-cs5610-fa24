@@ -4,6 +4,8 @@ import App from './App';
 import "bootstrap/dist/css/bootstrap.min.css";
 import reportWebVitals from './reportWebVitals';
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import './index.css';
+
 
 
 const root = ReactDOM.createRoot(
