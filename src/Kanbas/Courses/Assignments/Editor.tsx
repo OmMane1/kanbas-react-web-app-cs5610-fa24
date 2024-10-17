@@ -1,10 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Updated import
-import './Assignments.css'; // Import your CSS file
+import { useNavigate } from 'react-router-dom'; 
+import './Assignments.css'; 
 
 export default function AssignmentEditor() {
-    const navigate = useNavigate(); // Use useNavigate instead of useHistory
-
+    const navigate = useNavigate(); 
+    const handleCancel = () => {
+        // Logic to cancel the assignment (not implemented for now)
+        navigate('/assignments'); // Redirect back to assignments list after saving
+    };
     const handleSave = () => {
         // Logic to save the assignment (not implemented for now)
         navigate('/assignments'); // Redirect back to assignments list after saving
@@ -106,10 +109,17 @@ export default function AssignmentEditor() {
                     </div>
                 </div>
             </div>
-
+            <hr></hr>
             <div className="d-flex justify-content-end">
-                <button className="btn btn-success" onClick={handleSave}>Save</button>
-            </div>
+    <button className="btn btn-light me-2" style={{ color: 'black' }} onClick={handleCancel}>
+        Cancel
+    </button>
+    <button className="btn btn-danger" onClick={handleSave}>
+        Save
+    </button>
+</div>
+
+
         </div>
     );
 }
