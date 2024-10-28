@@ -1,35 +1,33 @@
-/* src/Kanbas/Courses/Assignments/Assignments.css */
 .search-input {
-    width: 200px; /* Adjust the width as needed */
-    margin-right: 10px; /* Space between the input and buttons */
+    width: 200px; 
+    margin-right: 10px;
 }
 
 .input-group {
-    display: flex; /* Ensure the input and icon are in a row */
-    align-items: center; /* Center align items vertically */
+    display: flex; 
+    align-items: center; 
 }
 
 .border-start {
-    border-left: 5px solid green; /* Green left border for the assignment list */
+    border-left: 5px solid green; 
 }
 
 .wd-assignment-list-item {
-    margin-bottom: 10px; /* Space between list items */
+    margin-bottom: 10px; 
 }
 
 .wd-assignment-link {
-    font-weight: bold; /* Make assignment titles bold */
-    color: #28a745; /* Green color for assignment titles */
+    font-weight: bold; 
+    color: #28a745; 
 }
 
 .text-success {
-    color: #28a745; /* Ensure the text color is consistent */
+    color: #28a745;
 }
 
 .container {
-    margin-top: 20px; /* Add some space at the top */
+    margin-top: 20px; 
 }
-/* Container for the entire assignment screen */
 .assignments-container {
     width: 100%;
     max-width: 800px;
@@ -38,7 +36,6 @@
     font-family: Arial, sans-serif;
   }
   
-  /* Top bar with search and buttons */
   .top-bar {
     display: flex;
     justify-content: space-between;
@@ -46,7 +43,6 @@
     margin-bottom: 20px;
   }
   
-  /* Search bar styling */
   .search-bar {
     display: flex;
     align-items: center;
@@ -68,7 +64,6 @@
     font-size: 16px;
   }
   
-  /* Button styling for Group and Assignment */
   .buttons {
     display: flex;
   }
@@ -93,7 +88,6 @@
     color: white;
   }
   
-  /* Assignments header */
   .assignments-header {
     display: flex;
     justify-content: space-between;
@@ -108,12 +102,10 @@
     font-size: 14px;
   }
   
-  /* Assignment list */
   .assignments-list {
     margin-top: 20px;
   }
   
-  /* Individual assignment item */
   .assignment-item {
     display: flex;
     align-items: center;
@@ -149,7 +141,6 @@
     font-size: 14px;
   }
   
-  /* Check and ellipsis icons */
   .check-icon {
     color: green;
     margin-right: 15px;
@@ -163,21 +154,21 @@
     color: red;
   }
   .small-font {
-    font-size: 0.95rem; 
+    font-size: 1.00rem; 
   }
   .wd-assignment-list-group {
-    border-left: 5px solid green; /* Add green border on the left */
+    border-left: 5px solid green; 
   }
   .wd-assignment-details-content {
-    margin-top: 5px; /* Adjust margin as needed */
+    margin-top: 5px; 
   }
   .icon-spacing {
-    margin-right: 30px; /* Adjust the margin value as needed */
+    margin-right: 30px; 
   }
   .wd-assignment-icon {
-    display: flex; /* Use flexbox for vertical alignment */
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 500%; /* Match the height of the assignment list item */
+    height: 500%; 
   }
   
