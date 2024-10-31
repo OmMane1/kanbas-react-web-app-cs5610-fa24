@@ -6,13 +6,18 @@ import { CiSearch } from 'react-icons/ci';
 import { FiPlus } from 'react-icons/fi'; 
 import './Assignments.css'; 
 import { PiNotePencilLight } from "react-icons/pi";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom"; 
 import * as db from "../../Database"; 
 
 export default function Assignments() {
   const { cid } = useParams(); 
+  const navigate = useNavigate(); 
   const assignments = db.assignments; 
   const courseAssignments = assignments.filter(assignment => assignment.course === cid);
+
+  const handleAddAssignment = () => {
+    navigate(`/Kanbas/Courses/${cid}/Assignments/New`); 
+  };
 
   return (
     <div id="wd-assignments" className="p-3">
@@ -39,7 +44,11 @@ export default function Assignments() {
           <button id="wd-add-assignment-group-btn" className="btn btn-secondary me-2">
             <FiPlus className="me-1" /> Group
           </button>
-          <button id="wd-add-assignment-btn" className="btn btn-danger">
+          <button 
+            id="wd-add-assignment-btn" 
+            className="btn btn-danger" 
+            onClick={handleAddAssignment} 
+          >
             <FiPlus className="me-1" /> Assignment
           </button>
         </div>
@@ -69,7 +78,8 @@ export default function Assignments() {
                   <a
                     className="wd-assignment-link"
                     href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} 
-                    style={{ color: 'black', textDecoration: 'none' }}>
+                    style={{ color: 'black', textDecoration: 'none' }}
+                  >
                     {assignment.title} 
                   </a>      
                   <LessonControlButtons />
