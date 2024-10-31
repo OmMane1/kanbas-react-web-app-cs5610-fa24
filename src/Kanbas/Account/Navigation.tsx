@@ -9,17 +9,19 @@ export default function Navigation() {
   const getLinkClass = (path: string) => {
     return `list-group-item ${location.pathname.includes(path) ? 'active' : 'text-danger'} border border-0`;
   };
+
   return (
     <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
-      <Link to="/Kanbas/Account/Signin" id="wd-account-signin-link" className={getLinkClass("/Kanbas/Account/Signin")}>
-        Signin
-      </Link>
-      <Link to="/Kanbas/Account/Signup" id="wd-account-signup-link" className={getLinkClass("/Kanbas/Account/Signup")}>
-        Signup
-      </Link>
-      <Link to="/Kanbas/Account/Profile" id="wd-account-profile-link" className={getLinkClass("/Kanbas/Account/Profile")}>
-        Profile
-      </Link>
+      {links.map((link) => (
+        <Link
+          key={link}
+          to={`/Kanbas/Account/${link}`}
+          id={`wd-account-${link.toLowerCase()}-link`}
+          className={getLinkClass(`/Kanbas/Account/${link}`)}
+        >
+          {link}
+        </Link>
+      ))}
     </div>
   );
 }
