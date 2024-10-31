@@ -1,54 +1,73 @@
 import { FaPlus } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import GreenCheckmark from "./GreenCheckmark";
-export default function ModulesControls() {
+import ModuleEditor from "./ModuleEditor";
+import { useSelector } from 'react-redux';
+
+export default function ModulesControls({ moduleName, setModuleName, addModule }:
+  { moduleName: string; setModuleName: (title: string) => void; addModule: () => void; }) {
+
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY"; 
+
   return (
     <div id="wd-modules-controls" className="text-nowrap">
-      <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
-        <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-        Module</button>
+      {isFaculty && ( 
+        <>
+          <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end"
+            data-bs-toggle="modal" data-bs-target="#wd-add-module-dialog" >
+            <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
+            Module
+          </button>
+          <ModuleEditor dialogTitle="Add Module" moduleName={moduleName}
+            setModuleName={setModuleName} addModule={addModule} />
+        </>
+      )}
+
       <div className="dropdown d-inline me-1 float-end">
         <button id="wd-publish-all-btn" className="btn btn-lg btn-secondary dropdown-toggle"
           type="button" data-bs-toggle="dropdown">
           <GreenCheckmark />
-          Publish All</button>
+          Publish All
+        </button>
         <ul className="dropdown-menu">
-        <li>
-    <Link 
-        id="wd-publish-all-modules-and-items-btn" 
-        className="dropdown-item" 
-        to="/publish-all" 
-    >
-        <GreenCheckmark />
-        Publish all modules and items
-    </Link>
-</li>
-<li>
-    <Link 
-        id="wd-publish-modules-only-button" 
-        className="dropdown-item" 
-        to="/publish-modules-only" >
-        <GreenCheckmark />
-        Publish modules only    </Link>
-</li>
-        
-<li>
-    <Link 
-        id="wd-unpublish-modules-only-button" 
-        className="dropdown-item" 
-        to="/unpublish-modules-only" >
-        <GreenCheckmark />
-        Unpublish modules only    </Link>
-</li>
-<li>
-    <Link 
-        id="wd-unpublish-all-modules-button" 
-        className="dropdown-item" 
-        to="/unpublish-all-modules" >
-        <GreenCheckmark />
-        Unpublish all modules     </Link>
-</li>
-         
+          <li>
+            <Link 
+              id="wd-publish-all-modules-and-items-btn" 
+              className="dropdown-item" 
+              to="/publish-all" 
+            >
+              <GreenCheckmark />
+              Publish all modules and items
+            </Link>
+          </li>
+          <li>
+            <Link 
+              id="wd-publish-modules-only-button" 
+              className="dropdown-item" 
+              to="/publish-modules-only" >
+              <GreenCheckmark />
+              Publish modules only
+            </Link>
+          </li>
+          <li>
+            <Link 
+              id="wd-unpublish-modules-only-button" 
+              className="dropdown-item" 
+              to="/unpublish-modules-only" >
+              <GreenCheckmark />
+              Unpublish modules only
+            </Link>
+          </li>
+          <li>
+            <Link 
+              id="wd-unpublish-all-modules-button" 
+              className="dropdown-item" 
+              to="/unpublish-all-modules" >
+              <GreenCheckmark />
+              Unpublish all modules
+            </Link>
+          </li>
         </ul>
       </div>
       <button

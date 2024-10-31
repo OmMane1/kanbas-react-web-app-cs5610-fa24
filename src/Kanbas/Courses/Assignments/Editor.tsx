@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom'; 
+import { useSelector } from 'react-redux'; // Import useSelector for accessing user role
 import * as db from '../../Database'; 
 import './Assignments.css'; 
 
@@ -7,10 +8,15 @@ export default function AssignmentEditor() {
     const { cid, aid } = useParams(); 
     const navigate = useNavigate(); 
 
+    const { currentUser } = useSelector((state: any) => state.accountReducer); 
     const assignment = db.assignments.find((assignment) => assignment._id === aid);
+
+    const isFaculty = currentUser?.role === "FACULTY"; 
+
     const handleCancel = () => {
         navigate(`/Kanbas/Courses/${cid}/Assignments`); 
     };
+
     const handleSave = () => {
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
@@ -26,7 +32,7 @@ export default function AssignmentEditor() {
                             className="form-control"
                             id="assignmentName"
                             value={assignment.title} 
-                            readOnly 
+                            readOnly={!isFaculty}
                         />
                     </div>
 
@@ -37,7 +43,7 @@ export default function AssignmentEditor() {
                             id="assignmentDescription"
                             rows={4}
                             value={assignment.description} 
-                            readOnly 
+                            readOnly={!isFaculty} 
                         />
                     </div>
 
@@ -52,7 +58,7 @@ export default function AssignmentEditor() {
                                     className="form-control"
                                     id="points"
                                     value={assignment.points}
-                                    readOnly
+                                    readOnly={!isFaculty} 
                                 />
                             </div>
                         </div>
@@ -69,7 +75,7 @@ export default function AssignmentEditor() {
                                     className="form-control"
                                     id="dueDate"
                                     value={assignment.dueDate} 
-                                    readOnly 
+                                    readOnly={!isFaculty} 
                                 />
                             </div>
                         </div>
@@ -86,7 +92,7 @@ export default function AssignmentEditor() {
                                     className="form-control"
                                     id="availableUntil"
                                     value={assignment.availableUntil} 
-                                    readOnly 
+                                    readOnly={!isFaculty}
                                 />
                             </div>
                         </div>
@@ -97,7 +103,7 @@ export default function AssignmentEditor() {
                         <button className="btn btn-light me-2" style={{ color: 'black' }} onClick={handleCancel}>
                             Cancel
                         </button>
-                        <button className="btn btn-danger" onClick={handleSave}>
+                        <button className="btn btn-danger" onClick={handleSave} disabled={!isFaculty}>
                             Save
                         </button>
                     </div>
