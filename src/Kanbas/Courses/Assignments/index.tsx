@@ -12,7 +12,6 @@ import * as db from "../../Database";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const navigate = useNavigate();
   const [assignments, setAssignments] = useState(db.assignments);
   const [isEditing, setIsEditing] = useState(false); 
 
@@ -31,7 +30,6 @@ export default function Assignments() {
     setIsEditing(false);
   };
 
-  // New handleDeleteAssignment function
   const handleDeleteAssignment = (assignmentId: string) => {
     const updatedAssignments = assignments.filter(assignment => assignment._id !== assignmentId);
     setAssignments(updatedAssignments);
