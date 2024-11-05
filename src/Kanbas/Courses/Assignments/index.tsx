@@ -25,11 +25,16 @@ export default function Assignments() {
   const handleSaveAssignment = (newAssignment: { _id: string; title: string; course: string; availableFrom: string; availableUntil: string; dueDate: string; points: number; description: string; }) => {
     setAssignments([...assignments, newAssignment]);
     setIsEditing(false);
-};
-
+  };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+  };
+
+  // New handleDeleteAssignment function
+  const handleDeleteAssignment = (assignmentId: string) => {
+    const updatedAssignments = assignments.filter(assignment => assignment._id !== assignmentId);
+    setAssignments(updatedAssignments);
   };
 
   if (isEditing) {
@@ -99,7 +104,11 @@ export default function Assignments() {
                   >
                     {assignment.title} 
                   </a>      
-                  <LessonControlButtons />
+                  <LessonControlButtons 
+                    assignmentId={assignment._id} 
+                    deleteAssignment={handleDeleteAssignment} 
+                    editAssignment={(id) => console.log(`Edit assignment with ID: ${id}`)} 
+                  />
                   <p className="small-font">
                     <span style={{ color: 'red' }}>Multiple Modules</span> | 
                     <b> Not Available until </b> {assignment.availableUntil} |

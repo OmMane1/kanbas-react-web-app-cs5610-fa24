@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as db from '../../Database';
 import './Assignments.css';
-import { addAssignment } from './reducer';
+import { updateAssignment } from './reducer'; // Make sure to implement this action in your reducer.
 
 interface EditorProps {
-    onSave: (newAssignment: {
+    onSave: (updatedAssignment: {
       _id: string;
       title: string;
       course: string;
@@ -18,7 +18,7 @@ interface EditorProps {
     }) => void;
     onCancel: () => void;
 }
-  
+
 export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
     const { cid, aid } = useParams();
     const navigate = useNavigate();
@@ -29,31 +29,42 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
 
     const isFaculty = currentUser?.role === "FACULTY";
 
-    const [assignmentName, setAssignmentName] = useState(assignment ? assignment.title : '');
-    const [assignmentDescription, setAssignmentDescription] = useState(assignment ? assignment.description : '');
-    const [points, setPoints] = useState(assignment ? String(assignment.points) : '0');
-    const [dueDate, setDueDate] = useState(assignment ? assignment.dueDate : '');
-    const [availableFrom, setAvailableFrom] = useState(assignment ? assignment.availableFrom : '');
-    const [availableUntil, setAvailableUntil] = useState(assignment ? assignment.availableUntil : '');
+    const [assignmentName, setAssignmentName] = useState('');
+    const [assignmentDescription, setAssignmentDescription] = useState('');
+    const [points, setPoints] = useState('0');
+    const [dueDate, setDueDate] = useState('');
+    const [availableFrom, setAvailableFrom] = useState('');
+    const [availableUntil, setAvailableUntil] = useState('');
+
+    useEffect(() => {
+        if (assignment) {
+            setAssignmentName(assignment.title);
+            setAssignmentDescription(assignment.description);
+            setPoints(String(assignment.points));
+            setDueDate(assignment.dueDate);
+            setAvailableFrom(assignment.availableFrom);
+            setAvailableUntil(assignment.availableUntil);
+        }
+    }, [assignment]);
 
     const handleCancel = () => {
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
 
     const handleSave = () => {
-        const newAssignment = {
-            _id: aid || `${Date.now()}`, 
+        const updatedAssignment = {
+            _id: aid!,
             title: assignmentName,
             description: assignmentDescription,
-            points: parseInt(points, 10),  // Parse as integer here
+            points: parseInt(points, 10),
             dueDate,
             availableFrom,
             availableUntil,
-            course: cid || '', 
+            course: cid || '',
         };
 
-        onSave(newAssignment);  // Trigger the onSave function passed in from props
-        dispatch(addAssignment(newAssignment));
+        onSave(updatedAssignment);
+        dispatch(updateAssignment(updatedAssignment)); // Dispatch the update action
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
 
