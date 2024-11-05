@@ -15,12 +15,13 @@ export default function Dashboard({
   courses: any[];
   course: any;
   setCourse: (course: any) => void;
-  addNewCourse: () => void;
+  addNewCourse: (newCourse: { name: string; description: string; _id: string }) => void;
   deleteCourse: (course: any) => void;
-  updateCourse: () => void;
+  updateCourse: (course: any) => void;
 }) {
-  // State for toggling course view
   const [showAllCourses, setShowAllCourses] = useState(false);
+  const [courseName, setCourseName] = useState("");
+  const [courseDescription, setCourseDescription] = useState("");
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const dispatch = useDispatch();
@@ -29,17 +30,43 @@ export default function Dashboard({
   const isFaculty = currentUser?.role === "FACULTY";
   const isStudent = currentUser?.role === "STUDENT";
 
-  // Toggle to show all courses or only enrolled courses
   const toggleEnrollmentView = () => {
     setShowAllCourses((prev) => !prev);
   };
 
-  // Check if a student is enrolled in a course
   const isEnrolled = (courseId: string) =>
     enrollments.some(
       (enrollment) =>
         enrollment.user === currentUser._id && enrollment.course === courseId
     );
+
+  const handleEnrollmentToggle = (courseId: string) => {
+    if (isEnrolled(courseId)) {
+      dispatch(unenrollFromCourse(courseId));
+    } else {
+      dispatch(enrollInCourse(courseId));
+    }
+  };
+
+  const handleAddCourse = () => {
+    const newCourse = {
+      name: courseName,
+      description: courseDescription,
+      _id: Math.random().toString(36).substr(2, 9),  
+    };
+    addNewCourse(newCourse);
+    setCourseName("");
+    setCourseDescription("");
+  };
+
+  const handleDeleteCourse = (courseId: string) => {
+    deleteCourse(courseId);
+  };
+
+  const handleUpdateCourse = () => {
+    updateCourse(course);
+    setCourse({});
+  };
 
   return (
     <div id="wd-dashboard">
@@ -53,13 +80,13 @@ export default function Dashboard({
             <button
               className="btn btn-primary float-end"
               id="wd-add-new-course-click"
-              onClick={addNewCourse}
+              onClick={handleAddCourse}
             >
               Add
             </button>
             <button
               className="btn btn-warning float-end me-2"
-              onClick={updateCourse}
+              onClick={handleUpdateCourse}
               id="wd-update-course-click"
             >
               Update
@@ -68,20 +95,22 @@ export default function Dashboard({
           <hr />
           <br />
           <input
-            defaultValue={course.name}
+            value={courseName}
+            onChange={(e) => setCourseName(e.target.value)}
             className="form-control mb-2"
-            onChange={(e) => setCourse({ ...course, name: e.target.value })}
+            placeholder="Course Name"
           />
           <textarea
-            defaultValue={course.description}
+            value={courseDescription}
+            onChange={(e) => setCourseDescription(e.target.value)}
             className="form-control"
-            onChange={(e) => setCourse({ ...course, description: e.target.value })}
+            placeholder="Course Description"
           />
+          
           <hr />
         </>
       )}
 
-      {/* Enrollments Button for Students */}
       {isStudent && (
         <button
           className="btn btn-primary float-end"
@@ -100,7 +129,6 @@ export default function Dashboard({
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
             .filter((course) => {
-              // Filter courses based on view toggle
               return showAllCourses || isEnrolled(course._id);
             })
             .map((course) => (
@@ -111,11 +139,7 @@ export default function Dashboard({
               >
                 <div className="card rounded-3 overflow-hidden">
                   <Link
-                    to={
-                      isEnrolled(course._id)
-                        ? `/Kanbas/Courses/${course._id}/Home`
-                        : "#"
-                    }
+                    to={isEnrolled(course._id) ? `/Kanbas/Courses/${course._id}/Home` : "#"}
                     className="wd-dashboard-course-link text-decoration-none text-dark"
                   >
                     <img
@@ -136,34 +160,24 @@ export default function Dashboard({
                       </p>
                       <button className="btn btn-primary">Go</button>
 
-                      {/* Enroll/Unenroll Button for Students */}
                       {isStudent && (
                         <button
-                          className={`btn float-end ${
-                            isEnrolled(course._id)
-                              ? "btn-danger"
-                              : "btn-success"
-                          }`}
+                          className={`btn float-end ${isEnrolled(course._id) ? "btn-danger" : "btn-success"}`}
                           onClick={(event) => {
                             event.preventDefault();
-                            if (isEnrolled(course._id)) {
-                              dispatch(unenrollFromCourse(course._id));
-                            } else {
-                              dispatch(enrollInCourse(course._id));
-                            }
+                            handleEnrollmentToggle(course._id);
                           }}
                         >
                           {isEnrolled(course._id) ? "Unenroll" : "Enroll"}
                         </button>
                       )}
 
-                      {/* Edit/Delete for Faculty */}
                       {isFaculty && (
                         <>
                           <button
                             onClick={(event) => {
                               event.preventDefault();
-                              deleteCourse(course._id);
+                              handleDeleteCourse(course._id);
                             }}
                             className="btn btn-danger float-end"
                             id="wd-delete-course-click"

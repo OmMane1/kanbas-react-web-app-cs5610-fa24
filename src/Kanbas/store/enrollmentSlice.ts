@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface EnrollmentState {
-  enrollments: string[];
+  enrollments: string[]; // Array of enrolled course IDs
 }
 
+// Helper function to load initial state from localStorage
+const loadStateFromLocalStorage = (): string[] => {
+  const storedEnrollments = localStorage.getItem("enrollments");
+  return storedEnrollments ? JSON.parse(storedEnrollments) : [];
+};
+
+// Initial state
 const initialState: EnrollmentState = {
-  enrollments: [],
+  enrollments: loadStateFromLocalStorage(),
 };
 
 const enrollmentSlice = createSlice({
@@ -16,11 +23,13 @@ const enrollmentSlice = createSlice({
       const courseId = action.payload;
       if (!state.enrollments.includes(courseId)) {
         state.enrollments.push(courseId);
+        localStorage.setItem("enrollments", JSON.stringify(state.enrollments));
       }
     },
     unenrollFromCourse: (state, action: PayloadAction<string>) => {
       const courseId = action.payload;
       state.enrollments = state.enrollments.filter((id) => id !== courseId);
+      localStorage.setItem("enrollments", JSON.stringify(state.enrollments));
     },
   },
 });
