@@ -64,39 +64,50 @@ export default function AssignmentEditor() {
                         </div>
                     </div>
 
-                    <div className="mb-3">
-                        <div className="row">
-                            <div className="col-4">
-                                <label htmlFor="dueDate" className="form-label">Due Date</label>
-                            </div>
-                            <div className="col-8">
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="dueDate"
-                                    value={assignment.dueDate} 
-                                    readOnly={!isFaculty} 
-                                />
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="mb-3">
-                        <div className="row">
-                            <div className="col-4">
-                                <label htmlFor="availableFrom" className="form-label">Available From</label>
-                            </div>
-                            <div className="col-8">
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="availableUntil"
-                                    value={assignment.availableUntil} 
-                                    readOnly={!isFaculty}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <label className="form-label mb-3">Assign</label>
+
+                    <div className="assign-box border p-3 rounded">    
+    <div className="mb-3">
+        <label htmlFor="dueDate" className="form-label">Due Date</label>
+        <input
+            type="date"
+            className="form-control"
+            id="dueDate"
+            value={assignment.dueDate} 
+            readOnly={!isFaculty}
+        />
+    </div>
+
+    <div className="row">
+        <div className="col-6">
+            <div className="mb-3">
+                <label htmlFor="availableFrom" className="form-label">Available From</label>
+                <input
+                    type="date"
+                    className="form-control"
+                    id="availableFrom"
+                    value={assignment.availableFrom} 
+                    readOnly={!isFaculty}
+                />
+            </div>
+        </div>
+        
+        <div className="col-6">
+            <div className="mb-3">
+                <label htmlFor="availableUntil" className="form-label">Until</label>
+                <input
+                    type="date"
+                    className="form-control"
+                    id="availableUntil"
+                    value={assignment.availableUntil} 
+                    readOnly={!isFaculty}
+                />
+            </div>
+        </div>
+    </div>
+</div>
+
 
                     <hr />
                     <div className="d-flex justify-content-end">
