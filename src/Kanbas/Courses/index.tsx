@@ -6,12 +6,22 @@ import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import { FaAlignJustify } from 'react-icons/fa';
 import PeopleTable from "./People/Table";
+import { useDispatch } from 'react-redux';
+import { addAssignment } from './Assignments/reducer'; 
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams<{ cid: string }>(); 
   const course = courses.find((course) => course._id === cid);
   const { pathname } = useLocation(); 
-  
+  const dispatch = useDispatch();
+
+  const handleSave = (newAssignment: any) => {
+    dispatch(addAssignment(newAssignment));
+  };
+
+  const handleCancel = () => {
+  };
+
   return (
     <div id="wd-courses">
       <h2 className="text-danger">
@@ -30,7 +40,10 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Modules" element={<Modules />} />
             <Route path="Assignments" element={<Assignments />} />
             <Route path="People" element={<PeopleTable />} />
-            <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+            <Route 
+              path="Assignments/:aid" 
+              element={<AssignmentEditor onSave={handleSave} onCancel={handleCancel} />} 
+            />
           </Routes>
         </div>
       </div>

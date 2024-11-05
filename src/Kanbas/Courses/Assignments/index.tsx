@@ -1,23 +1,40 @@
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
 import { BsGripVertical } from "react-icons/bs";
-import React from 'react';
 import { CiSearch } from 'react-icons/ci';
 import { FiPlus } from 'react-icons/fi'; 
 import './Assignments.css'; 
 import { PiNotePencilLight } from "react-icons/pi";
-import { useParams, useNavigate } from "react-router-dom"; 
+import AssignmentEditor from "./Editor";
 import * as db from "../../Database"; 
 
 export default function Assignments() {
-  const { cid } = useParams(); 
-  const navigate = useNavigate(); 
-  const assignments = db.assignments; 
+  const { cid } = useParams();
+  const navigate = useNavigate();
+  const [assignments, setAssignments] = useState(db.assignments);
+  const [isEditing, setIsEditing] = useState(false); 
+
   const courseAssignments = assignments.filter(assignment => assignment.course === cid);
 
   const handleAddAssignment = () => {
-    navigate(`/Kanbas/Courses/${cid}/Assignments/New`); 
+    setIsEditing(true);
   };
+
+  const handleSaveAssignment = (newAssignment: { _id: string; title: string; course: string; availableFrom: string; availableUntil: string; dueDate: string; points: number; description: string; }) => {
+    setAssignments([...assignments, newAssignment]);
+    setIsEditing(false);
+};
+
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  if (isEditing) {
+    return <AssignmentEditor onSave={handleSaveAssignment} onCancel={handleCancelEdit} />;
+  }
 
   return (
     <div id="wd-assignments" className="p-3">
