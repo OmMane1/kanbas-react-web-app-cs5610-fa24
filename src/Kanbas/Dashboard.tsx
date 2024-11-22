@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { enrollInCourse, unenrollFromCourse } from "./store/enrollmentSlice"; 
-import * as db from "./Database";
+import { enrollInCourse, unenrollFromCourse } from "./store/enrollmentSlice";
 
 export default function Dashboard({
   courses,
@@ -24,21 +23,18 @@ export default function Dashboard({
   const [courseDescription, setCourseDescription] = useState("");
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const dispatch = useDispatch();
-  const { enrollments } = db;
+  const navigate = useNavigate();
 
   const isFaculty = currentUser?.role === "FACULTY";
   const isStudent = currentUser?.role === "STUDENT";
 
+  const isEnrolled = (courseId: string) => enrollments.includes(courseId);
+
   const toggleEnrollmentView = () => {
     setShowAllCourses((prev) => !prev);
   };
-
-  const isEnrolled = (courseId: string) =>
-    enrollments.some(
-      (enrollment) =>
-        enrollment.user === currentUser._id && enrollment.course === courseId
-    );
 
   const handleEnrollmentToggle = (courseId: string) => {
     if (isEnrolled(courseId)) {
@@ -48,16 +44,31 @@ export default function Dashboard({
     }
   };
 
+  const handleCourseNavigation = (courseId: string) => {
+    if (isEnrolled(courseId)) {
+      navigate(`/Kanbas/Courses/${courseId}/Home`);
+    } else {
+      alert("You must be enrolled to access this course!");
+    }
+  };
+
   const handleAddCourse = () => {
+    if (!courseName.trim() || !courseDescription.trim()) {
+      alert("Please provide valid course details.");
+      return;
+    }
+  
     const newCourse = {
-      name: courseName,
-      description: courseDescription,
-      _id: Math.random().toString(36).substr(2, 9),  
+      name: courseName.trim(),
+      description: courseDescription.trim(),
+      _id: Math.random().toString(36).substr(2, 9), 
     };
-    addNewCourse(newCourse);
-    setCourseName("");
+
+    addNewCourse(newCourse); 
+    setCourseName(""); 
     setCourseDescription("");
   };
+  
 
   const handleDeleteCourse = (courseId: string) => {
     deleteCourse(courseId);
@@ -67,6 +78,7 @@ export default function Dashboard({
     updateCourse(course);
     setCourse({});
   };
+  console.log("Courses in Dashboard:", courses);
 
   return (
     <div id="wd-dashboard">
@@ -106,7 +118,6 @@ export default function Dashboard({
             className="form-control"
             placeholder="Course Description"
           />
-          
           <hr />
         </>
       )}
@@ -115,6 +126,7 @@ export default function Dashboard({
         <button
           className="btn btn-primary float-end"
           onClick={toggleEnrollmentView}
+          id="wd-enrollment-toggle"
         >
           {showAllCourses ? "Show My Courses" : "Show All Courses"}
         </button>
@@ -128,9 +140,7 @@ export default function Dashboard({
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses
-            .filter((course) => {
-              return showAllCourses || isEnrolled(course._id);
-            })
+            .filter((course) => showAllCourses || isEnrolled(course._id))
             .map((course) => (
               <div
                 className="wd-dashboard-course col"
@@ -139,7 +149,11 @@ export default function Dashboard({
               >
                 <div className="card rounded-3 overflow-hidden">
                   <Link
-                    to={isEnrolled(course._id) ? `/Kanbas/Courses/${course._id}/Home` : "#"}
+                    to="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleCourseNavigation(course._id);
+                    }}
                     className="wd-dashboard-course-link text-decoration-none text-dark"
                   >
                     <img
@@ -162,7 +176,9 @@ export default function Dashboard({
 
                       {isStudent && (
                         <button
-                          className={`btn float-end ${isEnrolled(course._id) ? "btn-danger" : "btn-success"}`}
+                          className={`btn float-end ${
+                            isEnrolled(course._id) ? "btn-danger" : "btn-success"
+                          }`}
                           onClick={(event) => {
                             event.preventDefault();
                             handleEnrollmentToggle(course._id);
