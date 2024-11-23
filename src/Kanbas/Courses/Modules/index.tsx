@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { BsGripVertical } from "react-icons/bs";
 import ModulesControls from "./ModulesControls";
 import ModuleControlButtons from "./ModuleControlButtons";
 import LessonControlButtons from "./LessonControlButtons";
-import { addModule, editModule, updateModule, deleteModule } from "./reducer";
+import { addModule, editModule, updateModule, deleteModule, setModules } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
+import * as coursesClient from "../client";
+import * as modulesClient from "./client";
+
 
 interface Lesson {
   _id: string;
@@ -25,16 +28,37 @@ export default function Modules() {
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: any) => state.modulesReducer as { modules: Module[] });
   const dispatch = useDispatch();
+  const fetchModules = async () => {
+    const modules = await coursesClient.findModulesForCourse(cid as string);
+    dispatch(setModules(modules));
+  };
+  useEffect(() => {
+    fetchModules();
+  }, []);
+
+  const createModuleForCourse = async () => {
+    if (!cid) return;
+    const newModule = { name: moduleName, course: cid };
+    const module = await coursesClient.createModuleForCourse(cid, newModule);
+    dispatch(addModule(module));
+  };
+
+  const removeModule = async (moduleId: string) => {
+    await modulesClient.deleteModule(moduleId);
+    dispatch(deleteModule(moduleId));
+  };
+
+  const saveModule = async (module: any) => {
+    await modulesClient.updateModule(module);
+    dispatch(updateModule(module));
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <ModulesControls
         moduleName={moduleName}
         setModuleName={setModuleName}
-        addModule={() => {
-          dispatch(addModule({ name: moduleName, course: cid }));
-          setModuleName("");
-        }}
+        addModule={createModuleForCourse}
       />
       <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", width: "100%", padding: "20px" }}>
       <ul id="wd-modules" className="list-group rounded-0" style={{ width: "100%", maxWidth: "100%", padding: "20px" }}>
@@ -58,7 +82,7 @@ export default function Modules() {
                         }
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
-                            dispatch(updateModule({ ...module, editing: false }));
+                            saveModule({ ...module, editing: false });
                           }
                         }}
                         defaultValue={module.name}
@@ -68,7 +92,7 @@ export default function Modules() {
                   <div className="d-flex align-items-center">
                     <ModuleControlButtons
                       moduleId={module._id}
-                      deleteModule={() => dispatch(deleteModule(module._id))}
+                      deleteModule={(moduleId) => removeModule(moduleId)}                      
                       editModule={() => dispatch(editModule(module._id))}
                     />
                   </div>

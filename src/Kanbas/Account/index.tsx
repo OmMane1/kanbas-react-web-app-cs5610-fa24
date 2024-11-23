@@ -6,7 +6,6 @@ import Navigation from "./Navigation";
 import { useSelector } from "react-redux";
 
 
-
 export default function Account() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
