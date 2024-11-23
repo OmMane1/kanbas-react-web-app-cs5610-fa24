@@ -29,22 +29,18 @@ export default function Modules() {
   const { modules } = useSelector((state: any) => state.modulesReducer as { modules: Module[] });
   const dispatch = useDispatch();
   const fetchModules = async () => {
-    const modules = await coursesClient.findModulesForCourse(cid as string);
-    dispatch(setModules(modules));
+    try {
+      const modules = await coursesClient.findModulesForCourse(cid as string);
+      console.log("Fetched modules:", modules);
+      dispatch(setModules(modules));
+    } catch (error) {
+      console.error("Error fetching modules:", error);
+    }
   };
+
   useEffect(() => {
-    const fetchModules = async () => {
-      try {
-        console.log("Fetching modules...");
-      } catch (error) {
-        console.error("Error fetching modules:", error);
-      }
-    };
-  
-    fetchModules();
-  }, []); 
-  
- 
+    fetchModules(); 
+  }, [cid]);
 
   const createModuleForCourse = async () => {
     if (!cid) return;

@@ -10,21 +10,14 @@ export default function Session({ children }: { children: any }) {
       const currentUser = await client.profile();
       dispatch(setCurrentUser(currentUser));
     } catch (err: any) {
-      console.error(err);
+      console.error("Error fetching profile:", err);
     }
     setPending(false);
   };
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
-    };
-  
-    fetchProfile();
+    fetchProfile(); 
   }, []); 
-  
   
   if (!pending) {
     return children;
