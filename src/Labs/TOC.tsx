@@ -53,6 +53,11 @@ export default function TOC() {
           Server Repository
         </a>
       </li>
+      <li className="nav-item">
+        <a id="wd-k" href="https://kanbas-node-server-app-78sb.onrender.com/" className="nav-link">
+          Server Link in Render
+        </a>
+      </li>
     </ul>
   );
 }
