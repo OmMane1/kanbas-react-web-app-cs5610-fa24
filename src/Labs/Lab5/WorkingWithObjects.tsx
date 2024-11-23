@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const WorkingWithObjects: React.FC = () => {
   const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 
-  const [module, setModule] = useState({
+  const [, setModule] = useState({
     id: "123",
     name: "Introduction to React",
     description: "Learn the basics of React, including components, state, and props.",
@@ -68,6 +68,7 @@ const WorkingWithObjects: React.FC = () => {
   };
 
   return (
+    
     <div>
       <h3>Working with Objects</h3>
       <button onClick={fetchModule} className="btn btn-primary">Get Module</button>

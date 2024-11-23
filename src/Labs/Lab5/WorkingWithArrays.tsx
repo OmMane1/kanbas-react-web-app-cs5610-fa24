@@ -32,7 +32,7 @@ const WorkingWithArrays: React.FC = () => {
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [fetchTodos]);
 
   return (
     <div>
