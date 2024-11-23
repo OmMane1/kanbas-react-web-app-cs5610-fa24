@@ -15,8 +15,16 @@ export default function Session({ children }: { children: any }) {
     setPending(false);
   };
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+  
     fetchProfile();
-  }, [fetchProfile]); 
+  }, []); 
+  
   
   if (!pending) {
     return children;

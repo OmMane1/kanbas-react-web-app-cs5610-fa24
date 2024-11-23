@@ -31,8 +31,17 @@ const WorkingWithArrays: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        console.log("Fetching todos...");
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    };
+  
     fetchTodos();
-  }, [fetchTodos]);
+  }, []); 
+  
 
   return (
     <div>

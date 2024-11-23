@@ -33,8 +33,17 @@ export default function Modules() {
     dispatch(setModules(modules));
   };
   useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        console.log("Fetching modules...");
+      } catch (error) {
+        console.error("Error fetching modules:", error);
+      }
+    };
+  
     fetchModules();
-  }, [fetchModules]);
+  }, []); 
+  
  
 
   const createModuleForCourse = async () => {
