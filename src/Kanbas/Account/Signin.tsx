@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
-import * as client from "./client"; // Axios client for API calls
+import * as client from "./client"; 
 
 export default function Signin() {
   const [credentials, setCredentials] = useState<{ username: string; password: string }>({ username: "", password: "" });
@@ -11,10 +11,10 @@ export default function Signin() {
 
   const signin = async () => {
     try {
-      const user = await client.signin(credentials); // API call to authenticate user
+      const user = await client.signin(credentials);
       if (!user) return alert("Invalid username or password");
-      dispatch(setCurrentUser(user)); // Update Redux store with authenticated user
-      navigate("/Kanbas/Dashboard"); // Redirect to Dashboard
+      dispatch(setCurrentUser(user)); 
+      navigate("/Kanbas/Dashboard"); 
     } catch (error: any) {
       alert(error.response?.data?.message || "An error occurred during sign-in");
     }

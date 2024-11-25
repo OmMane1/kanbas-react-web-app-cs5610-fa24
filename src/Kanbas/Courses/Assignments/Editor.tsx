@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import * as client from "./client";
 
 interface Assignment {
@@ -19,8 +20,11 @@ interface EditorProps {
 }
 
 export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
-  const { cid, aid } = useParams(); 
+  const { cid, aid } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+
   const [assignment, setAssignment] = useState<Assignment>({
     _id: "",
     title: "",
@@ -37,14 +41,14 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
     async function fetchAssignment() {
       if (aid) {
         try {
-          console.log("Fetching assignment with ID:", aid); 
+          console.log("Fetching assignment with ID:", aid);
           const fetchedAssignment = await client.getAssignmentById(aid);
-          console.log("Fetched assignment:", fetchedAssignment); 
+          console.log("Fetched assignment:", fetchedAssignment);
           setAssignment(fetchedAssignment);
         } catch (error) {
           console.error("Error fetching assignment:", error);
           alert("Assignment not found.");
-          navigate(`/Kanbas/Courses/${cid}/Assignments`); 
+          navigate(`/Kanbas/Courses/${cid}/Assignments`);
         }
       }
     }
@@ -69,7 +73,7 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
       } else {
         const response = await client.createAssignment({
           ...assignment,
-          _id: Date.now().toString(), 
+          _id: Date.now().toString(),
         });
         const createdAssignment = response;
         onSave(createdAssignment);
@@ -102,8 +106,9 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
           className="form-control"
           id="assignmentName"
           value={assignment.title}
+          readOnly={!isFaculty}
           onChange={(e) =>
-            setAssignment({ ...assignment, title: e.target.value })
+            isFaculty && setAssignment({ ...assignment, title: e.target.value })
           }
         />
       </div>
@@ -117,7 +122,9 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
           id="assignmentDescription"
           rows={4}
           value={assignment.description}
+          readOnly={!isFaculty}
           onChange={(e) =>
+            isFaculty &&
             setAssignment({ ...assignment, description: e.target.value })
           }
         />
@@ -132,7 +139,9 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
           className="form-control"
           id="points"
           value={assignment.points}
+          readOnly={!isFaculty}
           onChange={(e) =>
+            isFaculty &&
             setAssignment({ ...assignment, points: parseInt(e.target.value) })
           }
         />
@@ -147,7 +156,9 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
           className="form-control"
           id="dueDate"
           value={assignment.dueDate}
+          readOnly={!isFaculty}
           onChange={(e) =>
+            isFaculty &&
             setAssignment({ ...assignment, dueDate: e.target.value })
           }
         />
@@ -163,7 +174,9 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
             className="form-control"
             id="availableFrom"
             value={assignment.availableFrom}
+            readOnly={!isFaculty}
             onChange={(e) =>
+              isFaculty &&
               setAssignment({ ...assignment, availableFrom: e.target.value })
             }
           />
@@ -177,25 +190,29 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
             className="form-control"
             id="availableUntil"
             value={assignment.availableUntil}
+            readOnly={!isFaculty}
             onChange={(e) =>
+              isFaculty &&
               setAssignment({ ...assignment, availableUntil: e.target.value })
             }
           />
         </div>
       </div>
 
-      <div className="d-flex justify-content-end mt-3">
-        <button className="btn btn-light me-2" onClick={onCancel}>
-          Cancel
-        </button>
-        <button
-          className="btn btn-danger"
-          onClick={handleSave}
-          disabled={loading}
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
-      </div>
+      {isFaculty && (
+        <div className="d-flex justify-content-end mt-3">
+          <button className="btn btn-light me-2" onClick={onCancel}>
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

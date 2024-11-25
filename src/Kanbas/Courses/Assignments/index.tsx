@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import LessonControlButtons from "./LessonControlButtons";
 import ModuleControlButtons from "./ModuleControlButtons";
 import { BsGripVertical } from "react-icons/bs";
@@ -23,6 +24,9 @@ interface Assignment {
 
 export default function Assignments() {
   const { cid } = useParams();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -54,16 +58,27 @@ export default function Assignments() {
       alert("Title and course are required.");
       return;
     }
+  
+    setLoading(true); // Prevent multiple submissions
     try {
       const response = await client.createAssignment(newAssignment);
       const createdAssignment = response.data;
-      setAssignments([...assignments, createdAssignment]);
+  
+      if (!createdAssignment._id) {
+        throw new Error("Failed to create assignment. Missing ID.");
+      }
+  
+      setAssignments([...assignments, createdAssignment]); // Add new assignment to state
       setIsEditing(false);
     } catch (error) {
       console.error("Error saving assignment:", error);
       alert("Failed to save the assignment. Please try again later.");
+    } finally {
+      setLoading(false); // Ensure loading state is reset
     }
   };
+  
+  
 
   const handleCancelEdit = () => {
     setIsEditing(false);
@@ -117,19 +132,21 @@ export default function Assignments() {
           </div>
         </div>
 
-        <div className="d-flex">
-          <button id="wd-add-assignment-group-btn" className="btn btn-secondary me-2">
-            <FiPlus className="me-1" /> Group
-          </button>
-          <button
-            id="wd-add-assignment-btn"
-            className="btn btn-danger"
-            onClick={handleAddAssignment}
-            type="button"
-          >
-            <FiPlus className="me-1" /> Assignment
-          </button>
-        </div>
+        {isFaculty && (
+          <div className="d-flex">
+            <button id="wd-add-assignment-group-btn" className="btn btn-secondary me-2">
+              <FiPlus className="me-1" /> Group
+            </button>
+            <button
+              id="wd-add-assignment-btn"
+              className="btn btn-danger"
+              onClick={handleAddAssignment}
+              type="button"
+            >
+              <FiPlus className="me-1" /> Assignment
+            </button>
+          </div>
+        )}
       </div>
 
       <ul className="wd-assignments-list-group rounded-0">
