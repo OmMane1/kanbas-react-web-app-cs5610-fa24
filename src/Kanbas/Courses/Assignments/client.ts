@@ -19,6 +19,7 @@ export const getAssignmentById = async (assignmentId: string) => {
 
 export const createAssignment = async (assignment: any) => {
   const { data } = await axios.post(ASSIGNMENTS_API, assignment);
+  console.log("Server response inside createAssignment:", data);
   return data; 
 };
 

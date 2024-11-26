@@ -55,28 +55,44 @@ export default function Assignments() {
 
   const handleSaveAssignment = async (newAssignment: Assignment) => {
     if (!newAssignment.title || !newAssignment.course) {
-      alert("Title and course are required.");
-      return;
+        alert("Title and course are required.");
+        return;
     }
-  
+
     setLoading(true); // Prevent multiple submissions
     try {
-      const response = await client.createAssignment(newAssignment);
-      const createdAssignment = response.data;
-  
-      if (!createdAssignment._id) {
-        throw new Error("Failed to create assignment. Missing ID.");
-      }
-  
-      setAssignments([...assignments, createdAssignment]); // Add new assignment to state
-      setIsEditing(false);
+        console.log("Saving new assignment:", newAssignment);
+
+        const response = await client.createAssignment(newAssignment);
+        const createdAssignment = response.data || response; // Support direct response or wrapped response
+
+        console.log("Created assignment received from server:", createdAssignment);
+
+        // Validate the response data
+        if (!createdAssignment || typeof createdAssignment._id !== "string" || createdAssignment._id.trim() === "") {
+            console.error("Validation failed: createdAssignment is missing or has an invalid ID:", createdAssignment);
+            throw new Error("Failed to create assignment. Missing or invalid ID.");
+        }
+
+        // Add the newly created assignment to the list
+        setAssignments((prevAssignments) => [...prevAssignments, createdAssignment]);
+
+        // Close the editor
+        setIsEditing(false);
+
+        // Success feedback
+        alert("Assignment saved successfully.");
+        console.log("New assignment created successfully:", createdAssignment);
     } catch (error) {
-      console.error("Error saving assignment:", error);
-      alert("Failed to save the assignment. Please try again later.");
+        console.error("Error saving assignment:", error);
+        alert("Failed to save the assignment. Please try again later.");
     } finally {
-      setLoading(false); // Ensure loading state is reset
+        setLoading(false); // Always reset the loading state
     }
-  };
+};
+
+
+
   
   
 

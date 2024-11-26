@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as client from "./client";
+import axios from "axios";
 
 interface Assignment {
   _id: string;
@@ -55,37 +56,38 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
     fetchAssignment();
   }, [aid, cid, navigate]);
 
+  const [isSaving, setIsSaving] = useState(false); // Track save status
+
   const handleSave = async () => {
-    if (!assignment.title) {
-      alert("Title is required.");
-      return;
+    if (isSaving) {
+        console.log("Save is already in progress. Preventing duplicate request.");
+        return; // Prevent duplicate requests
     }
-    if (assignment.points < 0) {
-      alert("Points must be a non-negative number.");
-      return;
-    }
-    setLoading(true);
+    setIsSaving(true); // Set saving state to true
+    console.log("Starting to save assignment:", assignment);
+
     try {
-      if (aid) {
-        const response = await client.updateAssignment(aid, assignment);
-        const updatedAssignment = response;
-        onSave(updatedAssignment);
-      } else {
-        const response = await client.createAssignment({
-          ...assignment,
-          _id: Date.now().toString(),
-        });
-        const createdAssignment = response;
-        onSave(createdAssignment);
-      }
-      navigate(`/Kanbas/Courses/${cid}/Assignments`);
+        const response = await axios.post("http://localhost:4000/api/assignments", assignment);
+        console.log("Server response:", response);
+        if (response.status === 201) {
+            console.log("Assignment saved successfully:", response.data);
+            onSave(response.data); // Call the onSave callback with the saved assignment
+        } else {
+            console.warn("Unexpected response status:", response.status);
+            throw new Error("Unexpected response status");
+        }
     } catch (error) {
-      console.error("Error saving assignment:", error);
-      alert("Failed to save the assignment. Please try again later.");
+        console.error("Error saving assignment:", error);
+        alert("Failed to save the assignment. Please try again.");
     } finally {
-      setLoading(false);
+        console.log("Resetting save state.");
+        setIsSaving(false); // Reset saving state
     }
-  };
+};
+
+
+
+
 
   if (loading) {
     return <p>Loading assignment...</p>;
@@ -207,10 +209,11 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
           <button
             className="btn btn-danger"
             onClick={handleSave}
-            disabled={loading}
+            disabled={isSaving}
           >
-            {loading ? "Saving..." : "Save"}
+            {isSaving ? "Saving..." : "Save"}
           </button>
+
         </div>
       )}
     </div>
