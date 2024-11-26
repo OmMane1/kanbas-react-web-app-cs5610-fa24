@@ -1,16 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface EnrollmentState {
-  enrollments: string[]; // Array of enrolled course IDs
+  enrollments: string[]; 
 }
 
-// Helper function to load initial state from localStorage
 const loadStateFromLocalStorage = (): string[] => {
   const storedEnrollments = localStorage.getItem("enrollments");
   return storedEnrollments ? JSON.parse(storedEnrollments) : [];
 };
 
-// Initial state
 const initialState: EnrollmentState = {
   enrollments: loadStateFromLocalStorage(),
 };

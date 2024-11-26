@@ -80,6 +80,7 @@ export default function Dashboard({
   };
   console.log("Courses in Dashboard:", courses);
 
+
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
