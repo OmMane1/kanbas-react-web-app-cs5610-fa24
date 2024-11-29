@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 export default function Navigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const getLinkClass = (path: string) => {
-    return `list-group-item ${location.pathname.includes(path) ? 'active' : 'text-danger'} border border-0`;
+    return `list-group-item ${
+      pathname.includes(path) ? "active" : "text-danger"
+    } border border-0`;
   };
 
   return (
@@ -22,6 +24,15 @@ export default function Navigation() {
           {link}
         </Link>
       ))}
+      {currentUser && currentUser.role === "ADMIN" && (
+        <Link
+          to={`/Kanbas/Account/Users`}
+          id="wd-account-users-link"
+          className={getLinkClass("/Kanbas/Account/Users")}
+        >
+          Users
+        </Link>
+      )}
     </div>
   );
 }
