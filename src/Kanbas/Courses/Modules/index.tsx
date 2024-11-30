@@ -32,21 +32,12 @@ export default function Modules() {
     const modules = await coursesClient.findModulesForCourse(cid as string);
     dispatch(setModules(modules));
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   useEffect(() => {
-    const fetchModules = async () => {
-      if (cid) {
-        try {
-          const modules = await coursesClient.findModulesForCourse(cid as string);
-          dispatch(setModules(modules));
-        } catch (error) {
-          console.error("Error fetching modules:", error);
-        }
-      }
-    };
-  
     fetchModules();
-  }, [cid, dispatch]); // Dependencies are 'cid' and 'dispatch'
-  
+  }, []);
+
   const createModuleForCourse = async () => {
     if (!cid) return;
     const newModule = { name: moduleName, course: cid };

@@ -31,24 +31,10 @@ export default function PeopleDetails() {
     setRole(user.role);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   useEffect(() => {
-    if (uid) {
-      const fetchUser = async () => {
-        try {
-          const user = await client.findUserById(uid);
-          setUser(user);
-          setName(`${user.firstName} ${user.lastName}`);
-          setEmail(user.email);
-          setRole(user.role);
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      };
-  
-      fetchUser();
-    }
+    if (uid) fetchUser();
   }, [uid]);
-  
 
   if (!uid) return null;
 
