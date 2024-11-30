@@ -10,14 +10,14 @@ import Session from "./Account/Session";
 import * as userClient from "./Account/client";
 import { useSelector } from "react-redux";
 import * as courseClient from "./Courses/client";
-
 export default function Kanbas() {
-  const [courses, setCourses] = useState<any[]>([]);
-  
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [course, setCourse] = useState<any[]>([]);
+
   const fetchCourses = async () => {
     try {
-      const courses = await userClient.findMyCourses();
+      const courses = await courseClient.fetchAllCourses();
       setCourses(courses);
     } catch (error) {
       console.error(error);
@@ -26,30 +26,22 @@ export default function Kanbas() {
   useEffect(() => {
     fetchCourses();
   }, [currentUser]);
-
-  const deleteCourse = async (courseId: string) => {
-      await courseClient.deleteCourse(courseId); 
-        setCourses(courses.filter((course) => course._id !== courseId));
-  };
-
-
-  const [course, setCourse] = useState<any>({
-    _id: "1234", name: "New Course", number: "New Number",
-    startDate: "2023-09-10", endDate: "2023-12-15", description: "New Description",
-  });
+ 
   const addNewCourse = async () => {
-    const newCourse = await userClient.createCourse(course);
-    setCourses([ ...courses, newCourse ]);
+    const newCourse = await courseClient.createCourse(course);
+    setCourses([...courses, newCourse]);
   };
-
-  const updateCourse = async () => {
-    await courseClient.updateCourse(course);
-    setCourses(courses.map((c) => {
-        if (c._id === course._id) { return course; }
-        else { return c; }
-    })
-  );};
-
+ 
+  const deleteCourse = async (courseId: string) => {
+    const status = await courseClient.deleteCourse(courseId);
+    setCourses(courses.filter((course) => course._id !== courseId));
+  };
+ 
+  const updateCourse = async (updatedCourse: any) => {
+    const status = await courseClient.updateCourse(updatedCourse);
+    setCourses([...courses, updateCourse]);
+  }
+  
 
   return (
     <Session>
@@ -59,7 +51,8 @@ export default function Kanbas() {
         <Routes>
           <Route path="/" element={<Navigate to="Account" />} />
           <Route path="/Account/*" element={<Account />} />
-          <Route path="/Dashboard" element={<ProtectedRoute><Dashboard
+          <Route path="/Dashboard" element={<ProtectedRoute>
+            <Dashboard
               courses={courses}
               course={course}
               setCourse={setCourse}
