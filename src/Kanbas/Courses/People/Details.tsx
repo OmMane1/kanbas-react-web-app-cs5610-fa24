@@ -22,19 +22,24 @@ export default function PeopleDetails() {
     navigate(-1);
   };
 
-  const fetchUser = async () => {
-    if (!uid) return;
-    const user = await client.findUserById(uid);
-    setUser(user);
-    setName(`${user.firstName} ${user.lastName}`);
-    setEmail(user.email);
-    setRole(user.role);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   useEffect(() => {
-    if (uid) fetchUser();
+    if (uid) {
+      const fetchUser = async () => {
+        try {
+          const user = await client.findUserById(uid);
+          setUser(user);
+          setName(`${user.firstName} ${user.lastName}`);
+          setEmail(user.email);
+          setRole(user.role);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+  
+      fetchUser(); // Call the function inside useEffect
+    }
   }, [uid]);
+  
 
   if (!uid) return null;
 
