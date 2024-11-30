@@ -36,7 +36,6 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
     availableUntil: "",
     course: cid || "unknown",
   });
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchAssignment() {
@@ -85,13 +84,6 @@ export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
     }
 };
 
-
-
-
-
-  if (loading) {
-    return <p>Loading assignment...</p>;
-  }
 
   if (!cid) {
     return <p>Course ID is missing. Unable to load or edit assignment.</p>;

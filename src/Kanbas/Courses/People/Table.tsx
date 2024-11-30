@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import * as client from "./client";
 import PeopleDetails from "./Details";
 import { Link } from "react-router-dom";
 
