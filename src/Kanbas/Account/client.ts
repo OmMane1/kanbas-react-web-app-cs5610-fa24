@@ -33,6 +33,11 @@ export const updateUser = async (user: any) => {
   const response = await axiosWithCredentials.put(`${USERS_API}/${user._id}`, user);
   return response.data;
 };
+export const createUser = async (user: any) => {
+  const response = await axios.post(`${USERS_API}`, user);
+  return response.data;
+};
+
 
 export const signin = async (credentials: any) => {
   const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
