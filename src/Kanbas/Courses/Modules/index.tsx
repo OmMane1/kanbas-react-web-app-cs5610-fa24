@@ -33,9 +33,20 @@ export default function Modules() {
     dispatch(setModules(modules));
   };
   useEffect(() => {
+    const fetchModules = async () => {
+      if (cid) {
+        try {
+          const modules = await coursesClient.findModulesForCourse(cid as string);
+          dispatch(setModules(modules));
+        } catch (error) {
+          console.error("Error fetching modules:", error);
+        }
+      }
+    };
+  
     fetchModules();
-  }, [fetchModules]);
-
+  }, [cid, dispatch]); // Dependencies are 'cid' and 'dispatch'
+  
   const createModuleForCourse = async () => {
     if (!cid) return;
     const newModule = { name: moduleName, course: cid };

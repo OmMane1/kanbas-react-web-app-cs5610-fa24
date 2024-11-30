@@ -32,8 +32,23 @@ export default function PeopleDetails() {
   };
 
   useEffect(() => {
-    if (uid) fetchUser();
-  }, [uid, fetchUser]);
+    if (uid) {
+      const fetchUser = async () => {
+        try {
+          const user = await client.findUserById(uid);
+          setUser(user);
+          setName(`${user.firstName} ${user.lastName}`);
+          setEmail(user.email);
+          setRole(user.role);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      };
+  
+      fetchUser();
+    }
+  }, [uid]);
+  
 
   if (!uid) return null;
 
