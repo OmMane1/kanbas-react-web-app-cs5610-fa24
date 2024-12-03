@@ -63,7 +63,7 @@ export default function Dashboard({
     coursesToCheck.forEach((course) => {
       dispatch(fetchEnrollments(course._id));
     });
-  }, [dispatch, allCourses, enrollments]); // Remove courses and currentUser.role, add enrollments
+  }, [dispatch, allCourses, enrollments]); 
   
 
   const handleEnrollmentClick = (courseId: string) => {
