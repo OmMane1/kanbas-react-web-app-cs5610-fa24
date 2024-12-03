@@ -1,50 +1,49 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import * as client from "./client"; 
+import * as client from "./client";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "./reducer"; 
-
+import { setCurrentUser } from "./reducer";
 export default function Signup() {
-  const [user, setUser] = useState<{ username: string; password: string }>({ username: "", password: "" });
+  const [user, setUser] = useState<any>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const signup = async () => {
-    try {
-      const currentUser = await client.signup(user); 
-      dispatch(setCurrentUser(currentUser)); 
-      navigate("/Kanbas/Account/Profile");
-    } catch (error: any) {
-      alert(error.response?.data?.message || "An error occurred during sign-up");
-      console.log("Signing up with:", user);
-const currentUser = await client.signup(user);
-console.log("Sign up response:", currentUser);
-
-    }
+    const currentUser = await client.signup(user);
+    dispatch(setCurrentUser(currentUser));
+    navigate("/Kanbas/Account/Profile");
   };
-
   return (
-    <div className="wd-signup-screen container mt-5">
-      <h1 className="text-center mb-4">Sign up</h1>
-      <input
-        value={user.username}
-        onChange={(e) => setUser({ ...user, username: e.target.value })}
-        className="form-control mb-3"
-        placeholder="Username"
-      />
-      <input
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        type="password"
-        className="form-control mb-3"
-        placeholder="Password"
-      />
-      <button onClick={signup} className="btn btn-primary w-100 mb-3">
-        Sign up
-      </button>
-      <div className="text-center">
-        Already have an account? <Link to="/Kanbas/Account/Signin">Sign in</Link>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-12">
+          <div className="card mt-3">
+            <div className="card-header bg-white">
+              <h3 className="text-center">Sign up</h3>
+            </div>
+            <div className="card-body">
+              <input 
+                value={user.username} 
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
+                className="wd-username form-control mb-3" 
+                placeholder="Username" 
+              />
+              <input 
+                value={user.password} 
+                onChange={(e) => setUser({ ...user, password: e.target.value })} 
+                type="password"
+                className="wd-password form-control mb-3" 
+                placeholder="Password" 
+              />
+              <button 
+                onClick={signup} 
+                className="wd-signup-btn btn btn-primary w-100"
+                style={{ backgroundColor: '#6c63ff' }}
+              > 
+                Sign up 
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  );
-}
+  );}

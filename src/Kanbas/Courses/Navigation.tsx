@@ -1,32 +1,30 @@
 import React from 'react';
-import { Link, useLocation } from "react-router-dom";
-import './Navigation.css';
+import { Link, useParams, useLocation } from 'react-router-dom';
+import '../styles.css';
 
-interface CoursesNavigationProps {
-  courseId: string; 
-}
-
-const CoursesNavigation: React.FC<CoursesNavigationProps> = ({ courseId }) => {
+export default function CoursesNavigation() {
+  const { cid } = useParams();
   const location = useLocation();
+   
   const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
-
-  const getLinkClass = (path: string) => {
-    return `list-group-item ${location.pathname.includes(path) ? 'active' : 'text-danger'} border border-0`;
-  };
 
   return (
     <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
-      {links.map((link) => (
-        <Link
-          key={link}
-          to={`/Kanbas/Courses/${courseId}/${link}`}  
-          className={`${getLinkClass(`/Kanbas/Courses/${courseId}/${link}`)} link-width`}
-        >
-          {link}
-        </Link>
-      ))}
+      {links.map((link) => {
+        const linkPath = `/Kanbas/Courses/${cid}/${link}`;
+        const isActive = location.pathname.endsWith(link);
+
+        return (
+          <Link
+            key={link}
+            id={`wd-course-${link.toLowerCase()}-link`}
+            className={`list-group-item ${isActive ? 'active' : ''}`}
+            to={linkPath}
+          >
+            {link}
+          </Link>
+        );
+      })}
     </div>
   );
 }
-
-export default CoursesNavigation;

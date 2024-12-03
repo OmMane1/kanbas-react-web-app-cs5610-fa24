@@ -25,4 +25,3 @@ export default function ModuleEditor({ dialogTitle, moduleName, setModuleName, a
       );
     }
     
-    

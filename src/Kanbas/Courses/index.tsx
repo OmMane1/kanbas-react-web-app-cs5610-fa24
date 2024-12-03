@@ -1,49 +1,53 @@
+import React from 'react';
+import { Navigate, Route, Routes, useParams, useLocation } from "react-router-dom";
+
 import CoursesNavigation from "./Navigation";
-import { Route, Routes, useParams, useLocation } from "react-router";
-import Modules from "./Modules";
 import Home from "./Home";
-import Assignments from "./Assignments";
-import AssignmentEditor from "./Assignments/Editor";
+import Modules from "./Modules";
+import Assignments from "./Assignments/Editor";
+import AssignmentEditor from './Assignments/CreateAssignment';
+import PeopleTable from './People/Table';
 import { FaAlignJustify } from 'react-icons/fa';
-import PeopleTable from "./People/Table";
-import { useDispatch } from 'react-redux';
-import { addAssignment } from './Assignments/reducer'; 
+import QuizList from './Quizzes/index';
+import QuizEditor from './Quizzes/Editor';
+import QuizDetails from './Quizzes/QuizDetails';
 
 export default function Courses({ courses }: { courses: any[]; }) {
-  const { cid } = useParams<{ cid: string }>(); 
-  const course = courses.find((course) => course._id === cid);
-  const { pathname } = useLocation(); 
-  const dispatch = useDispatch();
-
-  const handleSave = (newAssignment: any) => {
-    dispatch(addAssignment(newAssignment));
-  };
-
-  const handleCancel = () => {
-  };
-
+  const { cid: courseId } = useParams<{ cid: string }>();
+  const course = courses.find((course) => course._id === courseId);
+  const { pathname } = useLocation();
+  
   return (
     <div id="wd-courses">
       <h2 className="text-danger">
-        <FaAlignJustify className="me-4 fs-4 mb-1" />
-        {course ? course.name : "Course Not Found"} &gt; {pathname.split("/")[4]}
+        <FaAlignJustify className="me-3 fs-4 mb-1" />
+        {course && course.number} {course && course.name} &gt; {pathname.split("/")[4]}
       </h2>
       <hr />
+
       <div className="d-flex">
         <div className="d-none d-md-block">
-          {course && <CoursesNavigation courseId={cid!} />} 
+          <CoursesNavigation />
         </div>
-        
-        <div className="flex-fill">
+        {/* Main Content Area */}
+        <div className="flex-grow-1">
           <Routes>
+            <Route path="/" element={<Navigate to="Home" />} />
             <Route path="Home" element={<Home />} />
             <Route path="Modules" element={<Modules />} />
-            <Route path="Assignments" element={<Assignments />} />
+            <Route path="Assignments">
+              <Route index element={<Assignments />} />
+              <Route path="new" element={<AssignmentEditor />} />
+              <Route path=":aid" element={<AssignmentEditor />} />
+            </Route>
+            <Route path="Quizzes">
+              <Route index element={<QuizList />} />
+              <Route path="new" element={<QuizEditor />} />
+              <Route path=":qid" element={<QuizEditor />} />
+              <Route path=":qid/details" element={<QuizDetails />} />
+            </Route>
             <Route path="People" element={<PeopleTable />} />
-            <Route 
-              path="Assignments/:aid" 
-              element={<AssignmentEditor onSave={handleSave} onCancel={handleCancel} />} 
-            />
+            <Route path="Grades" element={<h1>Grades</h1>} />
           </Routes>
         </div>
       </div>

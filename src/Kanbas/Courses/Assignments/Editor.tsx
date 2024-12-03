@@ -1,219 +1,221 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import * as client from "./client";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { BsGripVertical, BsPlus } from 'react-icons/bs';
+import { FaSearch, FaTrash } from 'react-icons/fa';
+import { FaPencil } from 'react-icons/fa6';
+import { deleteAssignment, setAssignments } from './reducer';
+import * as assignmentsClient from "./client";
 
 interface Assignment {
   _id: string;
   title: string;
+  course: string;
   description: string;
   points: number;
   dueDate: string;
   availableFrom: string;
   availableUntil: string;
-  course: string;
+  group: string;
+  submissionType: string;
 }
 
-interface EditorProps {
-  onSave: (updatedAssignment: Assignment) => void;
-  onCancel: () => void;
+interface KanbasState {
+  assignmentsReducer: {
+    assignments: Assignment[];
+  };
 }
 
-export default function AssignmentEditor({ onSave, onCancel }: EditorProps) {
-  const { cid, aid } = useParams();
-  const navigate = useNavigate();
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const isFaculty = currentUser?.role === "FACULTY";
-
-  const [assignment, setAssignment] = useState<Assignment>({
-    _id: "",
-    title: "",
-    description: "",
-    points: 0,
-    dueDate: "",
-    availableFrom: "",
-    availableUntil: "",
-    course: cid || "unknown",
+export default function Assignments() {
+  const { cid } = useParams();
+  const dispatch = useDispatch();
+  
+  // State for delete confirmation dialog
+  const [deleteDialog, setDeleteDialog] = useState({
+    isOpen: false,
+    assignmentId: '',
+    assignmentTitle: ''
   });
-  const [loading, setLoading] = useState(false);
+
+  // Get assignments from Redux store
+  const assignments = useSelector((state: KanbasState) => 
+    state.assignmentsReducer.assignments.filter(
+      assignment => assignment.course === cid
+    )
+  );
+  
 
   useEffect(() => {
-    async function fetchAssignment() {
-      if (aid) {
-        try {
-          console.log("Fetching assignment with ID:", aid);
-          const fetchedAssignment = await client.getAssignmentById(aid);
-          console.log("Fetched assignment:", fetchedAssignment);
-          setAssignment(fetchedAssignment);
-        } catch (error) {
-          console.error("Error fetching assignment:", error);
-          alert("Assignment not found.");
-          navigate(`/Kanbas/Courses/${cid}/Assignments`);
-        }
+    const fetchAssignments = async () => {
+      try {
+        const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignments(assignments));
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
       }
-    }
-    fetchAssignment();
-  }, [aid, cid, navigate]);
+    };
+    fetchAssignments();
+  }, [cid, dispatch]);
 
-  const [isSaving, setIsSaving] = useState(false); // Track save status
+  const handleDeleteClick = (assignmentId: string, title: string) => {
+    setDeleteDialog({
+      isOpen: true,
+      assignmentId,
+      assignmentTitle: title
+    });
+  };
 
-  const handleSave = async () => {
-    if (isSaving) {
-        console.log("Save is already in progress. Preventing duplicate request.");
-        return; // Prevent duplicate requests
-    }
-    setIsSaving(true); // Set saving state to true
-    console.log("Starting to save assignment:", assignment);
-
+  const handleDeleteConfirm = async () => {
     try {
-        const response = await axios.post("http://localhost:4000/api/assignments", assignment);
-        console.log("Server response:", response);
-        if (response.status === 201) {
-            console.log("Assignment saved successfully:", response.data);
-            onSave(response.data); // Call the onSave callback with the saved assignment
-        } else {
-            console.warn("Unexpected response status:", response.status);
-            throw new Error("Unexpected response status");
-        }
+      await assignmentsClient.deleteAssignment(deleteDialog.assignmentId);
+      dispatch(deleteAssignment(deleteDialog.assignmentId));
+      setDeleteDialog({
+        isOpen: false,
+        assignmentId: '',
+        assignmentTitle: ''
+      });
     } catch (error) {
-        console.error("Error saving assignment:", error);
-        alert("Failed to save the assignment. Please try again.");
-    } finally {
-        console.log("Resetting save state.");
-        setIsSaving(false); // Reset saving state
+      console.error("Error deleting assignment:", error);
     }
-};
+  };
 
+  const handleDeleteCancel = () => {
+    setDeleteDialog({
+      isOpen: false,
+      assignmentId: '',
+      assignmentTitle: ''
+    });
+  };
 
-
-
-
-  if (loading) {
-    return <p>Loading assignment...</p>;
-  }
-
-  if (!cid) {
-    return <p>Course ID is missing. Unable to load or edit assignment.</p>;
-  }
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'No due date';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
-    <div className="container p-3">
-      <div className="mb-3">
-        <label htmlFor="assignmentName" className="form-label">
-          Assignment Name
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="assignmentName"
-          value={assignment.title}
-          readOnly={!isFaculty}
-          onChange={(e) =>
-            isFaculty && setAssignment({ ...assignment, title: e.target.value })
-          }
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="assignmentDescription" className="form-label">
-          Description
-        </label>
-        <textarea
-          className="form-control"
-          id="assignmentDescription"
-          rows={4}
-          value={assignment.description}
-          readOnly={!isFaculty}
-          onChange={(e) =>
-            isFaculty &&
-            setAssignment({ ...assignment, description: e.target.value })
-          }
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="points" className="form-label">
-          Points
-        </label>
-        <input
-          type="number"
-          className="form-control"
-          id="points"
-          value={assignment.points}
-          readOnly={!isFaculty}
-          onChange={(e) =>
-            isFaculty &&
-            setAssignment({ ...assignment, points: parseInt(e.target.value) })
-          }
-        />
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="dueDate" className="form-label">
-          Due Date
-        </label>
-        <input
-          type="date"
-          className="form-control"
-          id="dueDate"
-          value={assignment.dueDate}
-          readOnly={!isFaculty}
-          onChange={(e) =>
-            isFaculty &&
-            setAssignment({ ...assignment, dueDate: e.target.value })
-          }
-        />
-      </div>
-
-      <div className="row">
-        <div className="col">
-          <label htmlFor="availableFrom" className="form-label">
-            Available From
-          </label>
-          <input
-            type="date"
+    <div id="wd-assignments" className="container mt-4">
+      {/* Search Bar and Filter Buttons */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="input-group" style={{ width: '250px' }}>
+          <span className="input-group-text bg-white">
+            <FaSearch />
+          </span>
+          <input 
+            id="wd-search-assignment"
             className="form-control"
-            id="availableFrom"
-            value={assignment.availableFrom}
-            readOnly={!isFaculty}
-            onChange={(e) =>
-              isFaculty &&
-              setAssignment({ ...assignment, availableFrom: e.target.value })
-            }
+            placeholder="Search for Assignments" 
           />
         </div>
-        <div className="col">
-          <label htmlFor="availableUntil" className="form-label">
-            Available Until
-          </label>
-          <input
-            type="date"
-            className="form-control"
-            id="availableUntil"
-            value={assignment.availableUntil}
-            readOnly={!isFaculty}
-            onChange={(e) =>
-              isFaculty &&
-              setAssignment({ ...assignment, availableUntil: e.target.value })
-            }
-          />
-        </div>
-      </div>
-
-      {isFaculty && (
-        <div className="d-flex justify-content-end mt-3">
-          <button className="btn btn-light me-2" onClick={onCancel}>
-            Cancel
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={handleSave}
-            disabled={isSaving}
+        <div>
+          <button className="btn btn-secondary me-2">SHOW BY DATE</button>
+          <button className="btn btn-secondary">SHOW BY TYPE</button>
+          <Link 
+            to={`/Kanbas/Courses/${cid}/Assignments/new`}
+            className="btn btn-danger ms-3"
           >
-            {isSaving ? "Saving..." : "Save"}
-          </button>
+            <BsPlus className="me-1" /> Assignment
+          </Link>
+        </div>
+      </div>
 
+      {/* Assignments List */}
+      <ul id="wd-assignments-list" className="list-group rounded-0">
+        {assignments.map((assignment) => (
+          <li 
+            key={assignment._id}
+            className="wd-assignment list-group-item p-0 mb-5 fs-5 border-gray"
+            style={{ borderLeft: '5px solid green' }}
+          >
+            <div className="d-flex align-items-center">
+              <BsGripVertical className="me-2 fs-3" />
+              <div className="wd-title p-3 ps-2 bg-light flex-grow-1">
+                {assignment.title}
+              </div>
+            </div>
+            <ul className="wd-assignments-list list-group rounded-0">
+              <li className="wd-assignment-item list-group-item p-3 ps-1">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <Link 
+                      to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                      className="wd-assignment-link text-decoration-none"
+                    >
+                      {assignment.title}
+                      <p className="text-muted mb-0">
+                        {assignment.description && assignment.description.substring(0, 100)}
+                        {assignment.description && assignment.description.length > 100 ? '...' : ''}
+                      </p>
+                    </Link>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <div className="text-end me-3">
+                      <div className="text-muted">
+                        Due: {formatDate(assignment.dueDate)}
+                      </div>
+                      <div>
+                        <strong>Points:</strong> {assignment.points}
+                      </div>
+                    </div>
+                    <div>
+                      <Link 
+                        to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                        className="text-decoration-none me-2"
+                      >
+                        <FaPencil className="text-primary" />
+                      </Link>
+                      <FaTrash
+                        className="text-danger"
+                        onClick={() => handleDeleteClick(assignment._id, assignment.title)}
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </li>
+        ))}
+      </ul>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteDialog.isOpen && (
+        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Delete Assignment</h5>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={handleDeleteCancel}
+                ></button>
+              </div>
+              <div className="modal-body">
+                Are you sure you want to delete the assignment "{deleteDialog.assignmentTitle}"?
+              </div>
+              <div className="modal-footer">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={handleDeleteCancel}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-danger" 
+                  onClick={handleDeleteConfirm}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
