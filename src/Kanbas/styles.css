@@ -12,6 +12,10 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
   background-color: white; 
   padding: 5px;
 }
+.link-width {
+  width: 150px; 
+}
+
 
 .list-group.wd > .list-group-item.active {
   color: black;
