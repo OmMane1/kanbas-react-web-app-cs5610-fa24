@@ -22,6 +22,11 @@ interface KanbasState {
   assignmentsReducer: {
     assignments: Assignment[];
   };
+  accountReducer: {
+    currentUser: {
+      role: string;
+    };
+  };
 }
 
 export default function AssignmentEditor() {
@@ -29,8 +34,13 @@ export default function AssignmentEditor() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Get existing assignment if editing
-  const assignment = useSelector((state: KanbasState) => 
+  // Determine user role
+  const currentUserRole = useSelector(
+    (state: KanbasState) => state.accountReducer.currentUser?.role
+  );
+  const isFacultyOrAdmin = currentUserRole === 'FACULTY' || currentUserRole === 'ADMIN';
+
+  const assignment = useSelector((state: KanbasState) =>
     state.assignmentsReducer.assignments.find(a => a._id === aid)
   );
 
@@ -42,9 +52,7 @@ export default function AssignmentEditor() {
     availableFromDate: '',
     availableUntilDate: ''
   });
-  
 
-  // Load existing assignment data when editing
   useEffect(() => {
     if (assignment) {
       setFormData({
@@ -109,6 +117,7 @@ export default function AssignmentEditor() {
           value={formData.title}
           onChange={handleInputChange}
           placeholder="New Assignment"
+          disabled={!isFacultyOrAdmin} 
         />
       </div>
 
@@ -122,6 +131,7 @@ export default function AssignmentEditor() {
           value={formData.description}
           onChange={handleInputChange}
           placeholder="New Assignment Description"
+          disabled={!isFacultyOrAdmin} 
         />
       </div>
 
@@ -139,11 +149,13 @@ export default function AssignmentEditor() {
               value={formData.points}
               onChange={handleInputChange}
               style={{ width: '100px' }}
+              disabled={!isFacultyOrAdmin} 
             />
           </div>
         </div>
       </div>
 
+      {isFacultyOrAdmin && ( 
       <div className="mb-3">
         <div className="row">
           <div className="col-1">
@@ -198,22 +210,27 @@ export default function AssignmentEditor() {
         </div>
       </div>
 
-      <div className="mt-4 text-end">
-        <button
-          type="button"
-          className="btn btn-light me-2"
-          onClick={handleCancel}
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
-      </div>
+      )}
+
+{isFacultyOrAdmin && ( 
+        <div className="mt-4 text-end">
+          <button
+            type="button"
+            className="btn btn-light me-2"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+        </div>
+        )}
+      
     </div>
   );
 }
