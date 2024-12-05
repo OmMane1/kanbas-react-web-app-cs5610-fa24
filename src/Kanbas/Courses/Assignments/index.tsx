@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { BsGripVertical } from 'react-icons/bs';
 import { CiSearch } from 'react-icons/ci';
 import { FiPlus } from 'react-icons/fi';
-import { FaTrash, FaPen } from 'react-icons/fa';
-import LessonControlButtons from './LessonControlButtons';
+import { FaTrash } from 'react-icons/fa';
 import ModuleControlButtons from './ModuleControlButtons';
 import { deleteAssignment, setAssignments } from './reducer';
 import * as assignmentsClient from './client';
