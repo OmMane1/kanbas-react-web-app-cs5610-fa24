@@ -154,6 +154,7 @@
     "endDate": "2023-05-15",
     "department": "History",
     "credits": 4,
+    "image": "/images/Early Christianity and the Apostolic Age.webp",
     "description": "This historical course delves into the development of early Christian communities and the Apostolic Age. It focuses on the life and teachings of Jesus Christ, the role of the Apostles, and the spread of Christianity across the Roman Empire. Students will explore primary sources, including the New Testament, to understand the challenges and triumphs of the early Church. The course also examines the formation of key Christian doctrines and the historical context of the Apostolic era.",
     "author": "65500111ea7ead465908d1fa"
   },
@@ -165,6 +166,7 @@
     "endDate": "2023-05-15",
     "department": "Ministry",
     "credits": 3,
+    "image": "/images/Leadership and Service in Christian Communities.webp",
     "description": "This course offers insights into effective leadership and service within Christian communities. Drawing on biblical teachings and the example of Saint Peter, it addresses the spiritual, ethical, and practical aspects of Christian leadership. Topics include pastoral care, community building, servant leadership, and the stewardship of church resources. Students will engage in practical exercises and discussions, preparing them for various roles in ministry and community service.",
     "author": "65500111ea7ead465908d1fa"
   },
@@ -176,6 +178,7 @@
     "endDate": "2023-05-15",
     "department": "Islamic Studies",
     "credits": 3,
+    "image": "/images/Sufi Philosophy and Mystical Traditions.webp",
     "description": "This course delves into the rich and profound world of Sufism, exploring its philosophical underpinnings, mystical practices, and historical development. Students will study key Sufi figures, including Rumi, Hafiz, and Khidr, and their teachings on love, divine union, and the journey of the soul. The course also examines various Sufi orders, their rituals, and contributions to Islamic spirituality and culture.",
     "author": "655000a4ea7ead465908d1f5"
   },
@@ -187,6 +190,7 @@
     "endDate": "2023-05-15",
     "department": "Islamic Ethics",
     "credits": 3,
+    "image": "/images/Ethical Wisdom in Islamic Teachings.webp",
     "description": "Focusing on the ethical dimensions of Islam, this course examines the moral teachings and wisdom found in the Quran and Hadith, with a special emphasis on the figure of Khidr. It explores concepts such as divine guidance, free will, moral reasoning, and the pursuit of righteousness. Students will engage in critical discussions on how these teachings apply to contemporary ethical dilemmas and personal spiritual growth.",
     "author": "655000a4ea7ead465908d1f5"
   },
@@ -198,6 +202,7 @@
     "endDate": "2023-05-15",
     "department": "Islamic Mysticism",
     "credits": 4,
+    "image": "/images/Understanding the Unseen Islamic Esotericism.webp",
     "description": "This advanced course explores the esoteric aspects of Islam, delving into topics such as the nature of the unseen world, spiritual symbolism in Islamic texts, and the role of mystical experiences. Drawing on the stories and teachings of Khidr, the course offers students a deeper understanding of the interplay between the material and spiritual realms, encouraging a reflective and introspective approach to religious study and practice.",
     "author": "655000a4ea7ead465908d1f5"
   },
@@ -209,6 +214,7 @@
     "endDate": "2023-05-15",
     "department": "Environmental Studies",
     "credits": 3,
+    "image": "/images/Ancient Chinese Environmental Management.webp",
     "description": "This course explores the principles and practices of environmental management in ancient China, with a focus on the legendary achievements of Yu the Great in flood control and irrigation. Students will examine ancient Chinese approaches to water management, agriculture, and land use, and their relevance to modern environmental challenges. The course also delves into the integration of these practices with traditional Chinese philosophies and governance."
   },
   {
@@ -219,6 +225,7 @@
     "endDate": "2023-05-15",
     "department": "Management Studies",
     "credits": 4,
+    "image": "/images/Leadership Lessons from Chinese Mythology.webp",
     "description": "Drawing on stories from Chinese mythology and history, this course examines the qualities and actions of effective leaders, using Yu the Great as a central figure. Students will explore themes of perseverance, vision, and ethical governance as demonstrated in Yu's legendary endeavors. The course also covers leadership lessons from other notable figures in Chinese mythology and their impact on the formation of Chinese cultural and political identity."
   },
   {
@@ -229,6 +236,7 @@
     "endDate": "2023-05-15",
     "department": "Engineering",
     "credits": 4,
+    "image": "/images/Hydraulic Engineering in Ancient Civilizations.webp",
     "description": "This engineering course offers an in-depth study of hydraulic projects in ancient civilizations, with a special focus on Yu the Great's flood control systems. Covering the design, construction, and impact of ancient dams, canals, and irrigation systems, the course provides insights into early engineering marvels. Comparative studies of hydraulic engineering in other ancient civilizations, such as Mesopotamia and the Indus Valley, are also included to provide a broader historical and technological context."
   }
   

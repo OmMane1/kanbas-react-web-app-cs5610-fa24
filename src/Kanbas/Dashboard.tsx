@@ -261,11 +261,16 @@ const displayedCourses = isAdminOrFaculty
                             )}
                           </div>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body fixed-card-body">
                           <h5 className="card-title text-dark mb-2">{course.name}</h5>
                           <p className="card-text text-muted small mb-3">{course.number}</p>
-                          <p className="card-text text-dark">{course.description}</p>
-                        </div>
+                          <p className="card-text text-dark">
+                            {course.description.length > 150
+                            ? `${course.description.substring(0, 150)}...`
+                            : course.description}
+                            </p>
+                            </div>
+
                       </Link>
                       
                       {isAdminOrFaculty && (
@@ -282,7 +287,7 @@ const displayedCourses = isAdminOrFaculty
                               onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#3d8bfd'}
                               onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#0d6efd'}
                             >
-                              View Course
+                              Go to Course
                             </Link>
                             <button
                               onClick={(event) => {

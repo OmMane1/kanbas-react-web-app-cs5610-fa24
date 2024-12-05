@@ -113,3 +113,12 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .module-spacing {
   margin-bottom: 1rem; 
 }
+
+.fixed-card-body {
+  height: 200px;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between; 
+}

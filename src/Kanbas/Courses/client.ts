@@ -34,14 +34,10 @@ export const findModulesForCourse = async (courseId: string) => {
   return response.data;
 };
 export const fetchAllCourses = async () => {
-  try {
-    const response = await axiosWithCredentials.get(COURSES_API);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching courses:', error);
-    throw error;
-  }
-};
+  const { data } = await axiosWithCredentials.get(COURSES_API);
+  return data;
+ };
+ 
 
  export const deleteCourse = async (id: string) => {
   const { data } = await axiosWithCredentials.delete(`${COURSES_API}/${id}`);
@@ -53,7 +49,9 @@ export const updateCourse = async (course: any) => {
   return data;
 };
 
-export function createCourse(course: any) {
-  throw new Error('Function not implemented.');
-}
+export const createCourse = async (course: any) => {
+  const { data } = await axiosWithCredentials.post(COURSES_API, course);
+  return data;
+ };
+ 
 
