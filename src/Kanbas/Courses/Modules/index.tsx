@@ -79,8 +79,6 @@ export default function Modules({ courseCode }: ModulesProps = {}) {
 
   return (
     <div id="wd-modules">
-      <h2>Course {course && course.number}</h2>
-
       {/* Modules Controls */}
       <ModulesControls
         onCollapseAll={handleCollapseAll}
@@ -89,10 +87,10 @@ export default function Modules({ courseCode }: ModulesProps = {}) {
         moduleName={moduleName}
         addModule={createModuleForCourse}
       />
-      <br /><br /><br /><br />
+      <br />
 
       {/* Dynamic modules */}
-      <ul className="list-group rounded-0">
+      <ul className="list-group rounded-0 me-3">
         {modules
           //.filter((module: any) => module.course === currentCourseId)
           .map((module: any) => (

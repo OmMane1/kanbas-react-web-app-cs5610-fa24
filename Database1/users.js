@@ -1,5 +1,4 @@
 [{
-  "_id": "123",
   "username": "iron_man",
   "password": "stark123",
   "firstName": "Tony",
@@ -13,7 +12,6 @@
   "totalActivity": "10:21:32"
 },
 {
-  "_id": "234",
   "username": "dark_knight",
   "password": "wayne123",
   "firstName": "Bruce",
@@ -27,7 +25,6 @@
   "totalActivity": "15:32:43"
 },
 {
-  "_id": "345",
   "username": "black_widow",
   "password": "romanoff123",
   "firstName": "Natasha",
@@ -41,7 +38,6 @@
   "totalActivity": "13:23:34"
 },
 {
-  "_id": "456",
   "username": "thor_odinson",
   "password": "mjolnir123",
   "firstName": "Thor",
@@ -55,7 +51,6 @@
   "totalActivity": "11:22:33"
 },
 {
-  "_id": "567",
   "username": "hulk_smash",
   "password": "banner123",
   "firstName": "Bruce",
@@ -69,7 +64,6 @@
   "totalActivity": "22:33:44"
 },
 {
-  "_id": "678",
   "username": "ring_bearer",
   "password": "shire123",
   "firstName": "Frodo",
@@ -83,7 +77,6 @@
   "totalActivity": "44:33:22"
 },
 {
-  "_id": "789",
   "username": "strider",
   "password": "aragorn123",
   "firstName": "Aragorn",
@@ -97,7 +90,6 @@
   "totalActivity": "12:23:34"
 },
 {
-  "_id": "890",
   "username": "elf_archer",
   "password": "legolas123",
   "firstName": "Legolas",
@@ -111,7 +103,6 @@
   "totalActivity": "21:32:43"
 },
     {
-      "_id": "160",
       "username": "om_mane",
       "password": "om123",
       "firstName": "Om",

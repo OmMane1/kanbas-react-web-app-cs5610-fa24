@@ -2,7 +2,8 @@ import React from 'react';
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
 import ModuleEditor from "./ModuleEditor";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface ModulesControlsProps {
   onCollapseAll: () => void;
@@ -26,9 +27,12 @@ export default function ModulesControls({
   setModuleName,
   addModule
 }: Props) {
-  
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+
+  const isAdminOrFaculty = currentUser.role === "FACULTY" || currentUser.role === "ADMIN";
+
   return (
-    <div className="d-flex justify-content-end align-items-center mb-3">
+    <div className="d-flex justify-content-end align-items-center mb-3 me-2">
       <button
         id="wd-collapse-all"
         className="btn btn-outline-secondary me-2"
@@ -96,17 +100,19 @@ export default function ModulesControls({
         </ul>
       </div>
 
-      <button 
-        className="btn btn-lg btn-danger me-1 float-end" id="wd-add-module-btn"
-        data-bs-toggle="modal" data-bs-target="#wd-add-module-dialog"
-      >
-        <FaPlus className="me-2" style={{ marginBottom: "2px" }} />
-        Module
-      </button>
+      {/* Conditionally render the "Add Module" button for faculty and admin */}
+      {isAdminOrFaculty && (
+        <button 
+          className="btn btn-lg btn-danger me-1 float-end" id="wd-add-module-btn"
+          data-bs-toggle="modal" data-bs-target="#wd-add-module-dialog"
+        >
+          <FaPlus className="me-2" style={{ marginBottom: "2px" }} />
+          Module
+        </button>
+      )}
 
       <ModuleEditor dialogTitle="Add Module" moduleName={moduleName}
                     setModuleName={setModuleName} addModule={addModule} />
-                    
     </div>
   );
 }
