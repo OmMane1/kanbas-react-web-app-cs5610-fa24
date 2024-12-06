@@ -172,6 +172,7 @@ export default function Kanbas() {
     }
   };
 
+  
   useEffect(() => {
     if (currentUser?._id) {
       fetchAllCourses();
@@ -198,6 +199,7 @@ export default function Kanbas() {
   
     initializeCourses();
   }, [currentUser]); 
+
 
   return (
     <Session>
