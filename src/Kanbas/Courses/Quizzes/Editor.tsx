@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addQuiz, updateQuiz } from './reducer';
 import * as client from "./client";
 import { QuizForm, Quiz, RootState } from './types';
-
+import  QuizQuestions  from './QuizQuestions//index';
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
@@ -15,6 +15,8 @@ export default function QuizEditor() {
   const quiz = useSelector((state: RootState) => 
     state.quizzesReducer.quizzes.find(q => q._id === qid)
   );
+
+  const [activeTab, setActiveTab] = useState<'details' | 'questions'>('details');
 
   const [formData, setFormData] = useState<QuizForm>({
     title: '',
@@ -123,6 +125,7 @@ export default function QuizEditor() {
     }
   };
 
+
   return (
     <div className="wd-kanbas-quiz-editor p-4">
       {/* Header */}
@@ -176,15 +179,34 @@ export default function QuizEditor() {
       </div>
   
       {/* Tabs */}
+
       <ul className="nav nav-tabs mb-4">
         <li className="nav-item">
-          <a className="nav-link active">Details</a>
+          <button 
+            className={`nav-link ${activeTab === 'details' ? 'active' : ''}`}
+            onClick={() => setActiveTab('details')}
+          >
+            Details
+          </button>
         </li>
         <li className="nav-item">
-          <a className="nav-link text-danger">Questions</a>
+          <button 
+            className={`nav-link ${activeTab === 'questions' ? 'active' : ''} text-danger`}
+            onClick={() => {
+              if (qid && qid !== 'new') {
+                setActiveTab('questions');
+              } else {
+                alert("Please save the quiz details first before adding questions.");
+              }
+            }}
+          >
+            Questions
+          </button>
         </li>
       </ul>
-  
+
+      {activeTab === 'details' ? (
+      <>
       {/* Quiz Title */}
       <div className="mb-4">
         <input
@@ -520,6 +542,14 @@ export default function QuizEditor() {
           Save & Publish
         </button>
       </div>
+      </>
+      ) : (
+        cid && qid ? (
+          <QuizQuestions quizId={qid} courseId={cid} />
+        ) : (
+          <div>Missing required parameters</div>
+        )
+      )}
     </div>
   );
 }
