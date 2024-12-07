@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState} from 'react';
 import { Routes, Route, Navigate } from "react-router";
 import Account from "./Account";
 import Dashboard from "./Dashboard";
@@ -183,6 +183,7 @@ export default function Kanbas() {
     if (currentUser?._id) {
       findCoursesForUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enrolling]);
 
   useEffect(() => {
@@ -198,6 +199,7 @@ export default function Kanbas() {
     };
   
     initializeCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]); 
 
 
