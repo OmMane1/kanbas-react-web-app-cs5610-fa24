@@ -22,7 +22,10 @@ export default function Modules({ courseCode }: ModulesProps = {}) {
   const [moduleName, setModuleName] = useState("");
   
   const { cid } = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const currentCourseId = courseCode || cid;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const course = courses.find((course) => course._id === currentCourseId);
  
   const dispatch = useDispatch();
   const saveModule = async (module: any) => {
