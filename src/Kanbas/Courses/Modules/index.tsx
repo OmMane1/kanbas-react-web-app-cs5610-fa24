@@ -23,7 +23,6 @@ export default function Modules({ courseCode }: ModulesProps = {}) {
   
   const { cid } = useParams();
   const currentCourseId = courseCode || cid;
-  const course = courses.find((course) => course._id === currentCourseId);
  
   const dispatch = useDispatch();
   const saveModule = async (module: any) => {
