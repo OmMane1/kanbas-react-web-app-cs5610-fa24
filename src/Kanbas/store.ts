@@ -4,17 +4,12 @@ import accountReducer from "./Account/reducer";
 import assignmentsReducer from "./Courses/Assignments/reducer";
 import enrollmentReducer from "./Courses/Enrollment/enrollmentSlice";
 import { EnrollmentState } from "./Courses/Enrollment/types";
-import { Quiz } from "./Courses/Quizzes/types";
-import quizzesReducer from "./Courses/Quizzes/reducer";
 
 export interface RootState {
   modulesReducer: any;
   accountReducer: any;
   assignmentsReducer: any;
   enrollmentReducer: EnrollmentState;
-  quizzesReducer: {
-    quizzes: Quiz[];
-  };
 }
 
 const store = configureStore({
@@ -23,7 +18,6 @@ const store = configureStore({
     accountReducer,
     assignmentsReducer,
     enrollmentReducer,
-    quizzesReducer
   }
 });
 

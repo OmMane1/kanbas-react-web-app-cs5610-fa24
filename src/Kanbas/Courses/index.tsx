@@ -8,13 +8,7 @@ import Assignments from "./Assignments/index";
 import AssignmentEditor from './Assignments/CreateAssignment';
 import PeopleTable from './People/Table';
 import { FaAlignJustify } from 'react-icons/fa';
-import QuizList from './Quizzes/index';
-import QuizEditor from './Quizzes/Editor';
-import QuizDetails from './Quizzes/QuizDetails';
-import QuizQuestions from './Quizzes/index';
-import QuizStartScreen from './Quizzes/QuizPreview/QuizStart';
-import QuizSubmission from './Quizzes/QuizPreview/QuizSubmission';
-import QuizPreview from './Quizzes/QuizPreview/index';
+
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid: courseId } = useParams<{ cid: string }>();
@@ -43,16 +37,6 @@ export default function Courses({ courses }: { courses: any[]; }) {
               <Route index element={<Assignments />} />
               <Route path="new" element={<AssignmentEditor />} />
               <Route path=":aid" element={<AssignmentEditor />} />
-            </Route>
-            <Route path="Quizzes">
-              <Route index element={<QuizList />} />
-              <Route path="new" element={<QuizEditor />} />
-              <Route path=":qid" element={<QuizEditor />} />
-              <Route path=":qid/details" element={<QuizDetails />} />
-              <Route path=":qid/questions" element={<QuizQuestions />} />
-              <Route path=":qid/preview" element={<QuizStartScreen />} /> 
-              <Route path=":qid/preview/take" element={<QuizPreview />} />
-              <Route path=":qid/preview/submitted" element={<QuizSubmission />} />
             </Route>
             <Route path="People" element={<PeopleTable />} />
             <Route path="Grades" element={<h1>Grades</h1>} />
