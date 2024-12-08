@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk, createAction } from "@reduxjs/toolkit";
 
-const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER || "http://localhost:4000";
+const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER || "https://kanbas-node-server-app-om-a5ab7ad2d634.herokuapp.com";
 const BASE_API = `${REMOTE_SERVER}/api`;
 
 export const toggleShowAllCourses = createAction("enrollment/toggleShowAllCourses");
