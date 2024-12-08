@@ -13,7 +13,7 @@ export default function Grades() {
 
   // Get all quizzes for this course
   const quizzes = useSelector((state: RootState) =>
-    state.quizzesReducer.quizzes.filter((q: { course: string | undefined; }) => q.course === cid)
+    state.quizzesReducer.quizzes.filter((q) => q.course === cid)
   );
 
   // Get submissions from state
@@ -48,10 +48,14 @@ export default function Grades() {
             </tr>
           </thead>
           <tbody>
-            {quizzes.map((quiz: { _id: React.Key | null | undefined; availableFromDate: string | number | Date; dueDate: string | number | Date; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; points: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => {
-              const submission = submissions.find((s: { quizId: any; }) => s.quizId === quiz._id);
+            {quizzes.map((quiz) => {
+              const submission = submissions.find((s) => s.quizId === quiz._id);
+              
+              // Display earned/total points
+              const earnedPoints = submission ? submission.score : '-';
+              const maxPoints = quiz.points;
+              const pointsDisplay = submission ? `${earnedPoints}/${maxPoints}` : `-/${maxPoints}`;
 
-              // Ensure dates are valid and convert to readable strings
               const availableDate = quiz.availableFromDate
                 ? new Date(quiz.availableFromDate).toDateString()
                 : '-';
@@ -66,22 +70,18 @@ export default function Grades() {
                       {quiz.title}
                     </Link>
                   </td>
-                  <td>{submission ? submission.score : '-'}</td>
-                  <td>{quiz.points}</td>
+                  <td>{pointsDisplay}</td>
+                  <td>{maxPoints}</td>
                   <td>{availableDate}</td>
                   <td>{dueDate}</td>
                   <td>
                     {submission ? (
-                      <span
-                        className={`fw-bold ${
-                          submission.percentage >= 70 ? "text-success" : "text-danger"
-                        }`}
-                      >
+                      <span className={`fw-bold ${
+                        submission.percentage >= 70 ? "text-success" : "text-danger"
+                      }`}>
                         {submission.percentage}%
                       </span>
-                    ) : (
-                      '-'
-                    )}
+                    ) : '-'}
                   </td>
                 </tr>
               );
@@ -91,7 +91,7 @@ export default function Grades() {
             <tr className="fw-bold">
               <td>Total</td>
               <td>
-                {submissions.reduce((sum: number, sub: { score: number; }) => sum + sub.score, 0)}
+                {submissions.reduce((sum: number, sub) => sum + sub.score, 0)}
               </td>
               <td>
                 {quizzes.reduce((sum: number, quiz: Quiz) => sum + quiz.points, 0)}
@@ -99,7 +99,7 @@ export default function Grades() {
               <td colSpan={3}>
                 {submissions.length > 0
                   ? Math.round(
-                      (submissions.reduce((sum: number, sub: { score: number; }) => sum + sub.score, 0) /
+                      (submissions.reduce((sum: number, sub) => sum + sub.score, 0) /
                         quizzes.reduce((sum: number, quiz: Quiz) => sum + quiz.points, 0)) *
                         100
                     ) + '%'
