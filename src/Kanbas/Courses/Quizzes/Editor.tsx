@@ -1,10 +1,11 @@
+import * as client from "./client";
+import { QuizForm, Quiz, QuizRootState } from './types';
+import  QuizQuestions  from './QuizQuestions//index';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addQuiz, updateQuiz } from './reducer';
-import * as client from "./client";
-import { QuizForm, Quiz, RootState } from './types';
-import  QuizQuestions  from './QuizQuestions//index';
+import { addQuiz, updateQuiz, togglePublishQuiz } from './reducer';;
+
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
@@ -12,8 +13,8 @@ export default function QuizEditor() {
   const dispatch = useDispatch();
   const [showTimeLimit, setShowTimeLimit] = useState(false);
 
-  const quiz = useSelector((state: RootState) => 
-    state.quizzesReducer.quizzes.find(q => q._id === qid)
+  const quiz = useSelector((state: QuizRootState) => 
+    state.quizzesReducer.quizzes.find((q : Quiz) => q._id === qid)
   );
 
   const [activeTab, setActiveTab] = useState<'details' | 'questions'>('details');
@@ -102,23 +103,38 @@ export default function QuizEditor() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (shouldPublish: boolean = false) => {
     try {
+      const dataToSave = {
+        ...formData,
+        published: shouldPublish ? true : (quiz?.published || false),
+        course: cid
+      };
+  
       if (qid && qid !== 'new') {
         const updatedQuiz = await client.updateQuiz(qid, {
-          ...formData,
+          ...dataToSave,
           _id: qid,
-          course: cid
         });
+
         dispatch(updateQuiz(updatedQuiz));
+        if(shouldPublish)
+        {
+          await client.publishQuiz(updatedQuiz._id);
+          dispatch(togglePublishQuiz(updatedQuiz._id as string));
+        }
+
       } else {
-        const newQuiz = await client.createQuiz(cid as string, {
-          ...formData,
-          course: cid,
-          published: false
-        });
+        const newQuiz = await client.createQuiz(cid as string, dataToSave);
         dispatch(addQuiz(newQuiz));
+
+        if(shouldPublish)
+        {
+          await client.publishQuiz(newQuiz._id);
+          dispatch(togglePublishQuiz(newQuiz._id as string));
+        }
       }
+
       navigate(`/Kanbas/Courses/${cid}/Quizzes`);
     } catch (error) {
       console.error("Error saving quiz:", error);
@@ -322,7 +338,7 @@ export default function QuizEditor() {
                   if (!e.target.checked) {
                     setFormData(prev => ({
                       ...prev,
-                      timeLimit: 0
+                      timeLimit: e.target.checked ? 20 : 0
                     }));
                   }
                 }}
@@ -528,16 +544,13 @@ export default function QuizEditor() {
         </button>
         <button 
           className="btn btn-primary" 
-          onClick={handleSubmit}
+          onClick={() => handleSubmit(false)}
         >
           Save
         </button>
         <button 
           className="btn btn-success"
-          onClick={() => {
-            setFormData(prev => ({ ...prev, published: true }));
-            handleSubmit();
-          }}
+          onClick={() => handleSubmit(true)}
         >
           Save & Publish
         </button>

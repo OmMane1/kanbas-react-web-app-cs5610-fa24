@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { QuizQuestionRootState, QuizQuestion } from '../QuizQuestions/questionTypes';
 import { fetchQuestions } from '../QuizQuestions/reducer';
 import { UserAnswer } from './QuizPreviewType';
+import { RootState } from '../../../store';
+import { submitQuiz } from './QuizReview/reducer'; 
 
 export default function QuizPreview() {
   const { qid, cid } = useParams();
@@ -17,6 +19,13 @@ export default function QuizPreview() {
   // Add timer state
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { submissions, status } = useSelector((state: RootState) => state.submissionsReducer);
+  const currentSubmission = submissions[0];
+
+  const isFacultyOrAdmin = currentUser.role === 'FACULTY' || currentUser.role === 'ADMIN';
+  const isStudent = currentUser.role === 'Student';
 
   useEffect(() => {
     if (qid) {
@@ -42,21 +51,21 @@ export default function QuizPreview() {
     });
   };
 
-  // Timer effect
   useEffect(() => {
     if (quiz?.timeLimit) {
       setTimeRemaining(quiz.timeLimit * 60);
       const interval = setInterval(() => {
         setTimeRemaining(prev => {
-          if (prev <= 0) {
+          if (prev <= 1) {
             clearInterval(interval);
+            handleQuizSubmit();
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
       setIntervalId(interval);
-
+  
       return () => clearInterval(interval);
     }
   }, [quiz]);
@@ -67,9 +76,157 @@ export default function QuizPreview() {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const status = useSelector((state: QuizQuestionRootState) => 
+  const quizStatus = useSelector((state: QuizQuestionRootState) => 
     state.questionsReducer.status
   );
+
+
+  const calculateSubmissionScore = (userAnswers: UserAnswer[], questions: QuizQuestion[]) => {
+    let correctAnswers = 0;
+    let totalPoints = 0;
+  
+    questions.forEach(question => {
+      totalPoints += question.points;
+      const userAnswer = userAnswers.find(a => a.questionId === question._id);
+      if (!userAnswer) return;
+  
+      switch (question.questionType) {
+        case 'MULTIPLE_CHOICE':
+          const correctChoice = question.choices?.find(c => c.isCorrect);
+          if (correctChoice && userAnswer.answer === correctChoice.text) {
+            correctAnswers += question.points;
+          }
+          break;
+        
+        case 'TRUE_FALSE':
+          if (userAnswer.answer === question.correctAnswer) {
+            correctAnswers += question.points;
+          }
+          break;
+        
+        case 'FILL_BLANK':
+          if (question.correctAnswers && question.correctAnswers.length > 0) {
+            const correct = question.correctAnswers.some(ans => {
+              const userAns = userAnswer.answer as string;
+              return ans.caseSensitive 
+                ? ans.text === userAns
+                : ans.text.toLowerCase() === userAns.toLowerCase();
+            });
+            if (correct) {
+              correctAnswers += question.points;
+            }
+          }
+          break;
+      }
+    });
+
+    return {
+      score: correctAnswers,
+      total: totalPoints,
+      percentage: totalPoints > 0 ? Math.round((correctAnswers / totalPoints) * 100) : 0
+    };
+  };
+
+  const handleQuizSubmit = async () => {
+    if (!qid || !cid) return; 
+  
+    try {
+      const scoreResult = calculateSubmissionScore(userAnswers, questions);
+      
+      // Transform ALL questions to answers, including unanswered ones
+      const processedAnswers = questions.map(question => {
+        const userAnswer = userAnswers.find(a => a.questionId === question._id);
+        let correctAnswer: string | boolean = '';
+        let isCorrect = false;
+        let userAnswerValue: string | boolean = ''; // Default empty answer
+  
+        if (userAnswer) {
+          switch (question.questionType) {
+            case 'MULTIPLE_CHOICE':
+              const correctChoice = question.choices?.find(c => c.isCorrect);
+              correctAnswer = correctChoice?.text || '';
+              isCorrect = correctChoice?.text === userAnswer.answer;
+              userAnswerValue = userAnswer.answer;
+              break;
+  
+            case 'TRUE_FALSE':
+              correctAnswer = question.correctAnswer || false;
+              isCorrect = userAnswer.answer === question.correctAnswer;
+              userAnswerValue = userAnswer.answer;
+              break;
+  
+            case 'FILL_BLANK':
+              correctAnswer = question.correctAnswers?.[0]?.text || '';
+              isCorrect = question.correctAnswers?.some(ans => {
+                const userAns = userAnswer.answer as string;
+                return ans.caseSensitive 
+                  ? ans.text === userAns
+                  : ans.text.toLowerCase() === userAns.toLowerCase();
+              }) || false;
+              userAnswerValue = userAnswer.answer;
+              break;
+          }
+        } else {
+          // Set default values for unanswered questions
+          switch (question.questionType) {
+            case 'MULTIPLE_CHOICE':
+              correctAnswer = question.choices?.find(c => c.isCorrect)?.text || '';
+              break;
+            case 'TRUE_FALSE':
+              correctAnswer = question.correctAnswer || false;
+              break;
+            case 'FILL_BLANK':
+              correctAnswer = question.correctAnswers?.[0]?.text || '';
+              break;
+          }
+        }
+  
+        return {
+          questionId: question._id,
+          questionType: question.questionType,
+          userAnswer: userAnswerValue,
+          correctAnswer,
+          points: isCorrect ? question.points : 0,
+          maxPoints: question.points,
+          isCorrect,
+          question: question.question,
+          choices: question.choices
+        };
+      });
+  
+      const submissionData = {
+        quizId: qid,
+        courseId: cid,
+        studentId: currentUser._id,
+        answers: processedAnswers,
+        startTime: startTime,
+        endTime: new Date(),
+        timeSpent: Math.round((new Date().getTime() - startTime.getTime()) / (1000 * 60)),
+        score: scoreResult.score,
+        maxScore: scoreResult.total,
+        percentage: scoreResult.percentage,
+        status: 'completed' as const
+      };
+  
+      await dispatch(submitQuiz({ 
+        quizId: qid,
+        submission: submissionData 
+      }) as any);
+  
+      navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview/submitted`, {
+        state: { 
+          userAnswers,
+          startTime: startTime.getTime(),
+          score: scoreResult.score,
+          totalPoints: scoreResult.total,
+          percentage: scoreResult.percentage
+        }
+      });
+    } catch (error) {
+      console.error('Error submitting quiz:', error);
+    }
+  };
+  
 
   if (status === 'loading') {
     return (
@@ -191,11 +348,6 @@ export default function QuizPreview() {
             </div>
           )}
         </div>
-        
-        <div className="alert alert-warning mt-3">
-          <i className="bi bi-exclamation-circle me-2"></i>
-          This is a preview of the published version of the quiz
-        </div>
 
         <div style={{ color: '#333', marginBottom: '20px' }}>
           <div>Started: {startTime.toLocaleString()}</div>
@@ -260,12 +412,7 @@ export default function QuizPreview() {
                 if (currentQuestionIndex < questions.length - 1) {
                   setCurrentQuestionIndex(prev => prev + 1);
                 } else {
-                  navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview/submitted`, {
-                    state: { 
-                      userAnswers,
-                      startTime: startTime.getTime()
-                    }
-                  });
+                  handleQuizSubmit();
                 }
               }}
               style={{
@@ -281,11 +428,12 @@ export default function QuizPreview() {
           </div>
         </div>
 
+        {isFacultyOrAdmin && (
         <div style={{ 
           borderTop: '1px solid #DEE2E6',
           marginTop: '20px',
           paddingTop: '20px'
-        }}>
+          }}>
           <button
             onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/questions`)}
             style={{
@@ -301,6 +449,7 @@ export default function QuizPreview() {
             Keep Editing This Quiz
           </button>
         </div>
+        )}
       </div>
 
       {/* Questions Navigation - Right Side */}

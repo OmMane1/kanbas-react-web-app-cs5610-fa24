@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchQuestions } from './reducer';
+import { fetchQuestions, deleteQuestionThunk, setQuestions } from './reducer';
 import { QuizQuestionRootState, QuizQuestion } from './questionTypes';
 import QuestionEditor from './Editor';
 
@@ -25,11 +25,35 @@ export default function QuizQuestions({ quizId , courseId}: QuizQuestionsProps) 
     state.questionsReducer.status
   );
 
+  const handleDelete = (questionId: string) => {
+    dispatch(deleteQuestionThunk(questionId) as any);
+  };
+
+  const [initialQuestions, setInitialQuestions] = useState<QuizQuestion[]>([]);
+
+  // In the useEffect where we fetch questions, store the initial state
   useEffect(() => {
     if (qid) {
-      dispatch(fetchQuestions(qid) as any);
+      dispatch(fetchQuestions(qid) as any).then((response: any) => {
+        // Store initial state when questions are first fetched
+        setInitialQuestions(response.payload);
+      });
     }
   }, [qid, dispatch]);
+
+  const handleCancel = () => {
+    if (window.confirm('Are you sure you want to cancel? All changes will be lost.')) {
+      if (initialQuestions.length > 0) {
+        dispatch(setQuestions(initialQuestions));
+      }
+      navigate(`/Kanbas/Courses/${courseId}/Quizzes/${qid}/details`);
+    }
+  };
+  
+  const handleSave = () => {
+    navigate(`/Kanbas/Courses/${courseId}/Quizzes/${qid}/details`);
+  };
+  
 
   const renderQuestionContent = (question: QuizQuestion) => {
     switch (question.questionType) {
@@ -165,21 +189,57 @@ export default function QuizQuestions({ quizId , courseId}: QuizQuestionsProps) 
                     {question.points} pts
                   </span>
                 </div>
-                <button
-                  onClick={() => {
-                    setEditingQuestionId(question._id);
-                    setShowEditor(true);
-                  }}
-                  style={{ 
-                    border: '1px solid #C7CDD1',
-                    padding: '4px 10px',
-                    background: 'white',
-                    cursor: 'pointer',
-                    fontSize: '14px'
-                  }}
-                >
-                  Edit
-                </button>
+                <div className="d-flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingQuestionId(question._id);
+                      setShowEditor(true);
+                    }}
+                    className="btn btn-sm"
+                    style={{
+                      backgroundColor: 'white',
+                      border: '1px solid #dee2e6',
+                      borderRadius: '4px',
+                      padding: '4px 12px',
+                      fontSize: '14px',
+                      color: '#495057',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = '#f8f9fa';
+                      e.currentTarget.style.borderColor = '#ced4da';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = 'white';
+                      e.currentTarget.style.borderColor = '#dee2e6';
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(question._id)}
+                    className="btn btn-sm"
+                    style={{
+                      backgroundColor: 'white',
+                      border: '1px solid #dee2e6',
+                      borderRadius: '4px',
+                      padding: '4px 12px',
+                      fontSize: '14px',
+                      color: '#dc3545',
+                      transition: 'all 0.2s ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = '#fee2e2';
+                      e.currentTarget.style.borderColor = '#dc3545';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = 'white';
+                      e.currentTarget.style.borderColor = '#dee2e6';
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
 
               {/* Question Text */}
@@ -217,35 +277,6 @@ export default function QuizQuestions({ quizId , courseId}: QuizQuestionsProps) 
           </div>
         </div>
       )}
-
-      <div style={{ borderTop: '1px solid #C7CDD1', paddingTop: '16px' }}>
-        <button
-          onClick={() => navigate(`/Kanbas/Courses/${courseId}/Quizzes`)}
-          style={{ 
-            border: '1px solid #C7CDD1',
-            padding: '6px 14px',
-            background: 'white',
-            cursor: 'pointer',
-            fontSize: '14px',
-            marginRight: '8px'
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={() => {/* handle save */}}
-          style={{ 
-            border: 'none',
-            padding: '6px 20px',
-            background: '#DC332F',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}
-        >
-          Save
-        </button>
-      </div>
 
       {/* Question Editor Modal */}
       {showEditor && (

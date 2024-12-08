@@ -5,15 +5,15 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { FaSearch } from 'react-icons/fa';
 import { deleteQuiz, setQuizzes, togglePublishQuiz } from './reducer';
+import { RootState } from '../../store';
 import * as client from "./client";
-import { Quiz, RootState } from './types';
-import { FaCheck } from 'react-icons/fa';
+import { Quiz, QuizRootState } from './types';
 
 export default function QuizList() {
   const { cid } = useParams();
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const { currentUser } = useSelector((state: QuizRootState) => state.accountReducer);
   
   const [deleteDialog, setDeleteDialog] = useState({
     isOpen: false,
@@ -21,7 +21,11 @@ export default function QuizList() {
     quizTitle: ''
   });
 
-  const quizzes = useSelector((state: RootState) => 
+  const { submissions } = useSelector((state: RootState) => 
+    state.submissionsReducer
+  );
+
+  const quizzes = useSelector((state: QuizRootState) => 
     state.quizzesReducer.quizzes.filter(quiz => {
       const baseFilter = quiz.course === cid &&
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -75,14 +79,14 @@ export default function QuizList() {
   const formatDate = (date: Date | string) => {
     if (!date) return '';
     return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',  // Added year
       month: 'short',
-      day: 'numeric',
+      day: 'numeric', 
       hour: 'numeric',
       minute: 'numeric',
       hour12: true
     });
-  };
-  
+   };
 
   const getAvailabilityStatus = (quiz: Quiz): string => {
     const now = new Date();
@@ -101,8 +105,10 @@ export default function QuizList() {
   };
 
   const getStudentScore = (quizId: string) => {
-    // This will be replaced with actual grade lookup logic later
-    return currentUser.role === 'STUDENT' ? Math.floor(Math.random() * 100) : undefined;
+    if (currentUser.role !== 'STUDENT') return undefined;
+    
+    const submission = submissions.find(s => s.quizId === quizId);
+    return submission ? submission.score : undefined;
   };
 
   return (
@@ -130,19 +136,6 @@ export default function QuizList() {
             >
               + Quiz
             </Link>
-            <div className="dropdown">
-              <button 
-                className="btn btn-light" 
-                type="button" 
-                data-bs-toggle="dropdown"
-              >
-                <BsThreeDotsVertical />
-              </button>
-              <ul className="dropdown-menu dropdown-menu-end">
-                <li><a className="dropdown-item" href="#">Sort by Due Date</a></li>
-                <li><a className="dropdown-item" href="#">Sort by Title</a></li>
-              </ul>
-            </div>
           </div>
         )}
       </div>
@@ -167,19 +160,12 @@ export default function QuizList() {
                 
                 <div className="flex-grow-1">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    {currentUser.role === 'STUDENT' ? (
-                      <span className="fs-5 fw-semibold">
-                        {quiz.title}
-                      </span>
-                    ) : (
                     <Link 
                       to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/details`}
                       className="text-decoration-none text-dark fs-5 fw-semibold"
                     >
                       {quiz.title}
                     </Link>
-                    )}
-                    
                     <div className="d-flex align-items-center" style={{ gap: '15px' }}>
                       <span className="fs-5">
                       {!quiz.published || 
@@ -232,19 +218,21 @@ export default function QuizList() {
                     <span>|</span>
                     <span>Due {formatDate(quiz.dueDate)}</span>
                     <span>|</span>
-                    <span>{quiz.points} pts</span>
+                    {currentUser.role === 'STUDENT' ? (
+                      <span>
+                        Score: {getStudentScore(quiz._id) !== undefined 
+                          ? `${getStudentScore(quiz._id)}/${quiz.points}` 
+                          : 'Not submitted'}
+                      </span>
+                    ) : (
+                      <span>{quiz.points} pts</span>
+                    )}
                     <span>|</span>
                     <span>{quiz.numberOfQuestions} Questions</span>
-                    {currentUser.role === 'STUDENT' && (
-                      <>
-                        <span>|</span>
-                        <span>Score: {getStudentScore(quiz._id)}/{quiz.points}</span>
-                      </>
-                    )}
+                  </div>
                   </div>
                 </div>
               </div>
-            </div>
           ))}
         </div>
       </div>

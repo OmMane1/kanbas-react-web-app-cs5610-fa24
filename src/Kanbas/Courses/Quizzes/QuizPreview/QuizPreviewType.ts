@@ -1,4 +1,4 @@
 export interface UserAnswer {
-    questionId: string;
-    answer: string | boolean;
-  }
+  questionId: string;
+  answer: string | boolean;
+}

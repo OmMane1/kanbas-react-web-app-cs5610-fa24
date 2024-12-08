@@ -1,19 +1,23 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Quiz, RootState } from './types';
+import { Quiz, QuizRootState } from './types';
 
 export default function QuizDetails() {
   const { cid, qid } = useParams();
   const navigate = useNavigate();
-  const currentUser = useSelector((state: RootState) => state.accountReducer.currentUser);
-  const quiz = useSelector((state: RootState) => 
-    state.quizzesReducer.quizzes.find(q => q._id === qid)
+  const currentUser = useSelector((state: QuizRootState) => state.accountReducer.currentUser);
+  const quiz = useSelector((state: QuizRootState) => 
+    state.quizzesReducer.quizzes.find((q : Quiz) => q._id === qid)
   );
+
+  const isFacultyOrAdmin = currentUser.role === 'FACULTY' || currentUser.role === 'ADMIN';
+  const isStudent = currentUser.role === 'Student';
 
   const formatDate = (date: Date | string) => {
     if (!date) return '';
     return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: 'numeric',
@@ -27,28 +31,28 @@ export default function QuizDetails() {
   return (
     <div className="p-4" style={{ maxWidth: '800px', margin: '0 auto' }}>
         <div className="bg-white d-flex justify-content-center gap-2 p-2 mb-4">
-        <button 
-          className="btn"
-          style={{
-            backgroundColor: '#f5f5f5',
-            border: '1px solid #ccc',
-            borderRadius: '3px',
-            padding: '6px 12px',
-            color: '#333'
-          }}
-          onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview`)}
-          onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = '#e6e6e6';
-            e.currentTarget.style.borderColor = '#adadad';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = '#f5f5f5';
-            e.currentTarget.style.borderColor = '#ccc';
-          }}
-        >
-          Preview
-        </button>
-          {currentUser.role !== 'STUDENT' && (
+          <button 
+            className="btn"
+            style={{
+              backgroundColor: '#f5f5f5',
+              border: '1px solid #ccc',
+              borderRadius: '3px',
+              padding: '6px 12px',
+              color: '#333'
+            }}
+            onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview`)}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#e6e6e6';
+              e.currentTarget.style.borderColor = '#adadad';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#f5f5f5';
+              e.currentTarget.style.borderColor = '#ccc';
+            }}
+          >
+            Preview
+          </button>
+          {isFacultyOrAdmin && (
             <button 
               className="btn"
               style={{
@@ -95,7 +99,7 @@ export default function QuizDetails() {
         <div>{quiz.shuffleAnswers ? 'Yes' : 'No'}</div>
 
         <div className="text-end text-secondary">Time Limit</div>
-        <div>{quiz.timeLimit} Minutes</div>
+        <div>{quiz.timeLimit === 0 ? "Unlimited" : `${quiz.timeLimit} Minutes`}</div>
 
         <div className="text-end text-secondary">Multiple Attempts</div>
         <div>{quiz.multipleAttempts ? 'Yes' : 'No'}</div>
