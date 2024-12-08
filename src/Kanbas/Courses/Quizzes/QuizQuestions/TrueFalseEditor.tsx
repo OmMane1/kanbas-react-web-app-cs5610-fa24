@@ -4,7 +4,16 @@ import { QuizQuestionForm, QuizQuestionRootState } from './questionTypes';
 import { createQuestion, fetchQuestions, updateQuestionThunk } from './reducer';
 import { useParams } from 'react-router-dom';
 
-export default function TrueFalseEditor({ questionId, onClose }: { questionId?: string; onClose: () => void }) {
+export default function TrueFalseEditor({   questionId, 
+  onClose,
+  points,
+  setPoints 
+}: { 
+  questionId?: string; 
+  onClose: () => void;
+  points: number;
+  setPoints: (points: number) => void;
+}) {
   const dispatch = useDispatch();
   const { qid } = useParams();
 
@@ -26,7 +35,7 @@ export default function TrueFalseEditor({ questionId, onClose }: { questionId?: 
     const questionData = {
       questionType: 'TRUE_FALSE' as const,
       question: questionText,
-      points: 4, //make this dynamic
+      points: points, 
       correctAnswer: correctAnswer
     };
 
